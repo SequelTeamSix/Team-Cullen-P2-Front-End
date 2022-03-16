@@ -1,0 +1,9 @@
+body {
+    background-color: aquamarine;
+}
+
+.login-div {
+    height: 230px;
+    width: 300px;
+    background-color: azure;
+}
