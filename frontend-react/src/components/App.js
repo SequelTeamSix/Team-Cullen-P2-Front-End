@@ -1,6 +1,10 @@
 import '../css/App.css';
 import Login from './Login';
 import Home from './Home';
+import Game from './Game';
+import Store from './Store';
+import DeckBuilder from './DeckBuilder';
+
 import {
   BrowserRouter as Router,
   Route,
@@ -11,7 +15,7 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <div class="content">
+        <div className="content">
           <Switch>
 
             <Route exact path="/">
@@ -20,6 +24,18 @@ function App() {
 
             <Route path="/home">
               <Home />
+            </Route>
+
+            <Route path="/game">
+              <Game />
+            </Route>
+
+            <Route path="/store">
+              <Store />
+            </Route>
+
+            <Route path="/deckbuilder">
+              <DeckBuilder />
             </Route>
 
           </Switch>
