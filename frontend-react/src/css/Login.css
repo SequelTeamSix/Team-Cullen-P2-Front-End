@@ -2,6 +2,7 @@ body {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    background-color: cadetblue;
 }
 
 .container {
@@ -12,7 +13,6 @@ body {
 }
 
 .login-form {
-    background-color: #333;
     color: white;
     padding: 25px;
     display: flex;
@@ -38,7 +38,7 @@ button {
     width: 100%;
     background-color: rgba(2, 2, 2, .5);
     padding: 20px;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0; 
     right: 0; 
@@ -66,4 +66,12 @@ button {
 
 .close-btn:hover {
     color: gray;
+}
+
+.new-account-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
 }

@@ -3,12 +3,105 @@ body {
     margin: 0;
     padding: 0;
 }
-.container {
 
+.main-page {
+    position: relative;
 }
 
-.home-div {
+.current-user {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 25px 50px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 20px;
+}
+
+.main-title {
+    font-size: 52px;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 50px;
+}
+
+.menu-link {
+    margin-top: 0;
+    font-size: 24px;
+    color: black;
+    background-color: white;
+    text-decoration: none;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    min-width: 250px;
+    outline: 0;
+    border: none;
+    transition: .5s ease;
+    cursor: pointer;
+}
+
+
+.menu-link:hover {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    transform: scale(1.02);
+}
+
+.rules-outer-div {
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(2, 2, 2, .5);
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0; 
+    right: 0; 
+    margin-left: auto; 
+    margin-right: auto; 
+}
+
+.rules-inner-div{
+    padding: 50px;
+    margin: 0 auto;
+    height: 80%;
+    width: 50%;
+    background-color: white;;
+    position: relative;
     display: flex;
     flex-direction: column;
 }
 
+.rules-paragraph {
+    text-align: left;
+}
+
+.close-btn {
+    font-size: 32px;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 25px;
+}
+
+.close-btn:hover {
+    color: gray;
+}
+
+
+.leaderboard-div {
+    width: 100%;
+    min-height: 400px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+}
