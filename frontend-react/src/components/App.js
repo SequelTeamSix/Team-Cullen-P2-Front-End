@@ -8,7 +8,7 @@ import DeckBuilder from './DeckBuilder';
 import {
   BrowserRouter as Router,
   Route,
-  Switch
+  Routes
 } from "react-router-dom";
 
 function App() {
@@ -16,29 +16,15 @@ function App() {
     <Router>
       <div className="App">
         <div className="content">
-          <Switch>
+          <Routes>
 
-            <Route exact path="/">
-              <Login />
-            </Route>
+            <Route path="/" element={<Login/>} />
+            <Route path="/home" element={<Home/>} />
+            <Route path="/game" element={<Game/>} />
+            <Route path="/store" element={<Store/>} />
+            <Route path="/deckbuilder" element={<DeckBuilder/>} />
 
-            <Route path="/home">
-              <Home />
-            </Route>
-
-            <Route path="/game">
-              <Game />
-            </Route>
-
-            <Route path="/store">
-              <Store />
-            </Route>
-
-            <Route path="/deckbuilder">
-              <DeckBuilder />
-            </Route>
-
-          </Switch>
+          </Routes>
         </div>
       </div>
     </Router>
