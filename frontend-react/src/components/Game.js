@@ -7,6 +7,7 @@ import '../css/Game.css';
 function Game() {
 
     const [rulesDisplay, setRulesDisplay] = useState('none');
+    const [endDisplay, setEndDisplay] = useState('none');
 
     function openRulesPopup(){
         setRulesDisplay('block')
@@ -14,6 +15,14 @@ function Game() {
 
       function closeRulesPopup(){
         setRulesDisplay('none')
+      }
+
+      function openEndPopup(){
+        setEndDisplay('block')
+      }
+
+      function closeEndPopup(){
+        setEndDisplay('none')
       }
 
     return (
@@ -24,6 +33,7 @@ function Game() {
                     <p>Rules</p>
                 </div>
                 <Link className="quit-btn" to="/home">Quit</Link>
+                <p onClick={openEndPopup}>Test End Screen</p>
             </div>
 
             {/* Rules Popup */}
@@ -39,6 +49,16 @@ function Game() {
                     Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt 
                     mollit anim id est laborum.
                     </p>
+                </div>
+            </div>{/* End Game Popup */}
+            <div className="end-game-outer-div" style={{display: endDisplay}}>
+                <div className="end-game-inner-div">
+                    <span className="close-btn" onClick={closeEndPopup}>X</span>
+                    <div className="end-screen-content">
+                        <h3>You Win or Lose</h3>
+                        <p className="end-screen-btn">Play Again With Same Deck</p>
+                        <Link className="end-screen-btn" to="/home">Quit</Link>
+                    </div>
                 </div>
             </div>
         

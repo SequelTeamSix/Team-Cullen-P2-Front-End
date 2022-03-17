@@ -1,0 +1,41 @@
+.builder-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    max-width: 1400px;
+    background-color: white;
+    min-height: 800px;
+    margin: 50px auto;
+    position: relative;
+    padding: 20px;
+}
+
+.gameplay-build,
+.all-cards-container {
+    width: 100%;
+}
+
+.gameplay-cards,
+.all-cards {
+    justify-content: left;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 20px auto;
+}
+
+.gameplay-card-slot,
+.owned-card-slot {
+    height: 150px;
+    width: 100px;
+    margin: 10px;
+    padding: 10px;
+    background-color: slategray;
+}
+
+.deck-title,
+.deck-description {
+    padding-left: 10px;
+}
+
