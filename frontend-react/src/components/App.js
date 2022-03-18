@@ -4,14 +4,11 @@ import Home from './Home';
 import Game from './Game';
 import Store from './Store';
 import DeckBuilder from './DeckBuilder';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes
-} from "react-router-dom";
 
 function App() {
+
   return (
     <Router>
       <div className="App">
