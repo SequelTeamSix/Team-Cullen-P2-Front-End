@@ -36,14 +36,13 @@ import { Link } from 'react-router-dom';
       let providedUsername = document.getElementById("login-username").value;
       let providedPassword = document.getElementById("login-password").value;
       let homeBtn = document.getElementById('home-btn');
-      console.log(this.state.allPlayers)
+    
       let matchingUser = this.state.allPlayers.filter(player => player.username === providedUsername);
-      console.log(matchingUser)
       if (matchingUser.length === 0){
         alert('Incorrect Username/Password')
         return;
       } else if (matchingUser[0].password === providedPassword){
-        console.log('working')
+        this.setState({currentUser : matchingUser})
         homeBtn.click();
       } 
     }
@@ -51,15 +50,19 @@ import { Link } from 'react-router-dom';
     //Creating a new account
     confirmNewAccount(e){
       e.preventDefault();
-      let newUsername = document.getElementById('new-account-username');
-      let newPassword1 = document.getElementById('new-account-password1');
-      let newPassword2 = document.getElementById('new-account-password2');
+      let newUsername = document.getElementById('new-account-username').value;
+      let newPassword1 = document.getElementById('new-account-password1').value;
+      let newPassword2 = document.getElementById('new-account-password2').value;
+
+      console.log(newPassword1);
+      console.log(newPassword2);
 
       if(newPassword1 !== newPassword2){
         alert("Oops, your passwords don't match")
         return;
+      } else {
+        this.AddNewPlayerToDatabase(newUsername, newPassword1);
       }
-      this.AddNewPlayerToDatabase(newUsername, newPassword1);
     }
 
     //Add new player to the database 
@@ -72,12 +75,13 @@ import { Link } from 'react-router-dom';
           'loses': 0
         }
 
-        axios.put('http://localhost:8000/player/add', newUser)
+        axios.post('http://localhost:8000/player/add', newUser)
           .then(response => {
             let newPlayer = response.data;
             this.setState({currentUser : newPlayer})
+            this.getAllUsers();
           })
-          
+
       }
     
       //Popup Menu Hiding and Displaying
@@ -91,9 +95,11 @@ import { Link } from 'react-router-dom';
 
     render(){
       return (
-       <div>
-        <Link id="home-btn" to="/home">Go To Home</Link>
-        <div className="container">
+       <div className="login-bg">
+         <div className="bg-overlay"></div>
+        <Link id="home-btn" to={{pathname: "/home", currentUser: this.currentUser}} >Go To Home</Link>
+        <h1 className="main-title">Superhero Dueling Cards</h1>
+        <div className="login-container">
           <form className="login-form" onSubmit={(e) => this.validateLogin(e)} method="post">
               <div className="form-field-div">
                 <label htmlFor="username">Username</label>

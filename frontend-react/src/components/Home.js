@@ -1,26 +1,32 @@
 import React from "react";
-import { useState } from 'react';
 import '../css/Home.css';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 
-function Home() {
+export default class Home extends React.Component {
 
-    const [rulesDisplay, setRulesDisplay] = useState('none');
-
-    function openRulesPopup(){
-        setRulesDisplay('block')
-      }
-
-      function closeRulesPopup(){
-        setRulesDisplay('none')
-      }
+    // constructor(props){
+    //     super(props);
+    //     this.state = {
+    //      location: useLocation(),
+    //     }
+    //   }
 
 
-    return (
+    // function openRulesPopup(){
+    //     setRulesDisplay('block')
+    //   }
+
+    //   function closeRulesPopup(){
+    //     setRulesDisplay('none')
+    //   }
+
+
+    render() {
+        return (
     <div>
         <div className="main-page">
-        <p className="current-user">Welcome, Username</p>
+        <p className="current-user">Welcome, {this.props.location.state.username}</p>
         <Link to="/">Go To Login</Link>
             <div className="container">
                 <h3 className="main-title">Superhero Card Duel</h3>
@@ -28,12 +34,12 @@ function Home() {
                     <Link className="menu-link" to="/game">Play Game</Link>
                     <Link className="menu-link" to="/store">Visit Store</Link>
                     <Link className="menu-link" to="/deckbuilder">My Deck Builder</Link>
-                    <p className="menu-link" onClick={openRulesPopup}>Read Rules</p>
+                    <p className="menu-link" onClick={this.openRulesPopup}>Read Rules</p>
                 </div>
 
-                <div className="rules-outer-div" style={{display: rulesDisplay}}>
+                <div className="rules-outer-div" style={{display: 'none'}}>
                     <div className="rules-inner-div">
-                        <span className="close-btn" onClick={closeRulesPopup}>X</span>
+                        <span className="close-btn" onClick={this.closeRulesPopup}>X</span>
                         <p className="rules-paragraph">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
                         sed do eiusmod tempor incididunt ut labore et dolore magna 
@@ -52,9 +58,8 @@ function Home() {
             </div>
         </div>
     </div>
-    
-    );
+    )
+    }
   }
   
-  export default Home;
   
