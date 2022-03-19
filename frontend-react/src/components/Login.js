@@ -1,54 +1,53 @@
 import React from "react";
 import axios from 'axios';
-// import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import '../css/Login.css';
 import { Link } from 'react-router-dom';
-// import { render } from "react-dom";
+import { render } from "react-dom";
+import { ThemeContext } from "./App";
 
 
- export default class Login extends React.Component {
 
-  constructor(props){
-    super(props);
-    this.state = {
-     allPlayers: [],
-     newUserPopupDisplay: 'none',
-     currentUser: []
-    }
-  }
+ export default function Login() {
 
-  //Get all the saved players from the database and store them
-  componentDidMount(){
-    this.getAllUsers();
-  }
-  
-  getAllUsers(){
-    axios.get('http://localhost:8000/player')
-    .then(response => {
-      let returnedPlayers = response.data;
-      this.setState({allPlayers : returnedPlayers})
-    })
-  }
+    // const [allUsers, setAllUsers] = useState([]);
+    const [popupDisplay, setPopupDisplay] = useState('none');
+    const [currentUserId, setCurrentUserId] = useState('0');
+    const contextUsers = useContext(ThemeContext);
+    const [allUsers, setAllUsers] = useState();
+    const [homeBtnDisplay, setHomeBtnDisplay] = useState('none');
+
+
+    useEffect(() => {
+        setAllUsers(contextUsers);
+    }, [contextUsers])
    
+    function checkAllUsers(){
+      console.log(allUsers)
+    }
+
     //Logging in to a saved account
-    validateLogin(e){
+    function validateLogin(e){
       e.preventDefault();
       let providedUsername = document.getElementById("login-username").value;
       let providedPassword = document.getElementById("login-password").value;
-      let homeBtn = document.getElementById('home-btn');
     
-      let matchingUser = this.state.allPlayers.filter(player => player.username === providedUsername);
+      let matchingUser = allUsers.filter(user => user.username === providedUsername);
       if (matchingUser.length === 0){
         alert('Incorrect Username/Password')
         return;
       } else if (matchingUser[0].password === providedPassword){
-        this.setState({currentUser : matchingUser})
-        homeBtn.click();
+        setCurrentUserId(matchingUser[0].player_id);
+        setHomeBtnDisplay('block')
       } 
     }
 
+    function checkIfUserIsReady() {
+
+    }
+
     //Creating a new account
-    confirmNewAccount(e){
+    function confirmNewAccount(e){
       e.preventDefault();
       let newUsername = document.getElementById('new-account-username').value;
       let newPassword1 = document.getElementById('new-account-password1').value;
@@ -61,12 +60,12 @@ import { Link } from 'react-router-dom';
         alert("Oops, your passwords don't match")
         return;
       } else {
-        this.AddNewPlayerToDatabase(newUsername, newPassword1);
+        AddNewPlayerToDatabase(newUsername, newPassword1);
       }
     }
 
     //Add new player to the database 
-      AddNewPlayerToDatabase(username, password){
+      function AddNewPlayerToDatabase(username, password){
         const newUser = {
           'username': username,
           'password': password,
@@ -77,71 +76,74 @@ import { Link } from 'react-router-dom';
 
         axios.post('http://localhost:8000/player/add', newUser)
           .then(response => {
-            let newPlayer = response.data;
-            this.setState({currentUser : newPlayer})
-            this.getAllUsers();
+            let newUser = response.data;
+            setCurrentUserId(newUser.player_id)
+            
           })
 
       }
     
       //Popup Menu Hiding and Displaying
-      openNewAccountDiv(){
-       this.setState({ newUserPopupDisplay : 'block'})
+      function openNewAccountDiv(){
+       setPopupDisplay('block');
       }
   
-      closeNewAccountDiv(){
-        this.setState({ newUserPopupDisplay : 'none'})
+      function closeNewAccountDiv(){
+       setPopupDisplay('none');
       }
 
-    render(){
       return (
+        
        <div className="login-bg">
          <div className="bg-overlay"></div>
-        <Link id="home-btn" to={{pathname: "/home", currentUser: this.currentUser}} >Go To Home</Link>
         <h1 className="main-title">Superhero Dueling Cards</h1>
         <div className="login-container">
-          <form className="login-form" onSubmit={(e) => this.validateLogin(e)} method="post">
+          <form className="login-form" onSubmit={(e) => validateLogin(e)} method="post">
               <div className="form-field-div">
                 <label htmlFor="username">Username</label>
-                <input id="login-username" type="text" placeholder="Enter Username" name="username" required/>
+                <input id="login-username" type="text" name="username" required/>
               </div>
               
               <div className="form-field-div">
                 <label htmlFor="password">Password</label>
-                <input id="login-password" type="password" placeholder="Enter Password" name="password" required/>
+                <input id="login-password" type="password" name="password" required/>
               </div>
             
               <button type="submit">Login</button>
-              <button id="new-account-btn" type="button" onClick={() => this.openNewAccountDiv()}>Create New Account</button>
+              <button id="new-account-btn" type="button" onClick={() => openNewAccountDiv()}>Create New Account</button>
           </form>
 
-            <div id="new-account-div" style={{display: this.state.newUserPopupDisplay}}>
+        <Link id="home-btn" to={"/home"} state={{userId:currentUserId}} style={{display: homeBtnDisplay}}>Go To Home</Link>
+
+            <div id="new-account-div" style={{display: popupDisplay}}>
               <div className="new-account-content">
                 <h2>Create New Account</h2>
-                <span className="close-btn" onClick={() => this.closeNewAccountDiv()}>X</span>
-                <form className="new-account-form" action="" method="post">
+                <span className="close-btn" onClick={() => closeNewAccountDiv()}>X</span>
+
+                <form className="new-account-form" onSubmit={(e) => confirmNewAccount(e)} method="post">
                   <div className="form-field-div">
                     <label htmlFor="username">Username</label>
-                    <input id="new-account-username" type="text" placeholder="Enter Username" name="username"/>
+                    <input id="new-account-username" type="text" name="username" required/>
                   </div>
                   
                   <div className="form-field-div">
                     <label htmlFor="password">Password</label>
-                    <input id="new-account-password1" type="password" placeholder="Enter Password" name="password" />
+                    <input id="new-account-password1" type="password" name="password" required/>
                   </div>
 
                   <div className="form-field-div">
                     <label htmlFor="password-confirm">Confirm Password</label>
-                    <input id="new-account-password2" type="password" placeholder="Confirm Your Password" name="password-confirm" />
+                    <input id="new-account-password2" type="password" name="password-confirm" required/>
                   </div>
 
-                  <button id="confirm-account-btn" type="submit" onClick={(e) => this.confirmNewAccount(e)}>Create New Account</button>
+                  <button id="confirm-account-btn" type="submit">Create New Account</button>
 
                 </form>
+                
               </div>
             </div>
         </div>
       </div>
+      
     )
   }
-}

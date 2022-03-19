@@ -1,32 +1,49 @@
 import React from "react";
 import '../css/Home.css';
-import { Link, useLocation } from 'react-router-dom';
+import axios from 'axios';
+import { useState, useEffect, useContext } from 'react';
+import { Link, useLocation} from 'react-router-dom';
+import { ThemeContext } from "./App";
 
 
-export default class Home extends React.Component {
 
-    // constructor(props){
-    //     super(props);
-    //     this.state = {
-    //      location: useLocation(),
-    //     }
-    //   }
+export default function Home() {
+    const location = useLocation();
+    const { userId } = location.state;
+    const [currentUser, setCurrentUser] = useState();
+
+    useEffect(() => {
+        console.log(userId)
+        getUserById(userId);
+
+        function getUserById(id){
+            let url = 'http://localhost:8000/player/id/'+id
+            console.log(url)
+            axios.get(url)
+            .then(response => {
+              let returnedUser = response.data;
+              console.log(returnedUser)
+              setCurrentUser(returnedUser);
+            })
+          }
+     }, [])
+    
+       
+
+    function openRulesPopup(){
+        // setRulesDisplay('block')
+      }
+
+      function closeRulesPopup(){
+        // setRulesDisplay('none')
+      }
 
 
-    // function openRulesPopup(){
-    //     setRulesDisplay('block')
-    //   }
-
-    //   function closeRulesPopup(){
-    //     setRulesDisplay('none')
-    //   }
-
-
-    render() {
-        return (
+   
+return (
     <div>
         <div className="main-page">
-        <p className="current-user">Welcome, {this.props.location.state.username}</p>
+        <p className="current-user">Welcome, {currentUser.username}</p>
         <Link to="/">Go To Login</Link>
             <div className="container">
                 <h3 className="main-title">Superhero Card Duel</h3>
@@ -34,12 +51,12 @@ export default class Home extends React.Component {
                     <Link className="menu-link" to="/game">Play Game</Link>
                     <Link className="menu-link" to="/store">Visit Store</Link>
                     <Link className="menu-link" to="/deckbuilder">My Deck Builder</Link>
-                    <p className="menu-link" onClick={this.openRulesPopup}>Read Rules</p>
+                    <p className="menu-link" onClick={() => openRulesPopup()}>Read Rules</p>
                 </div>
 
                 <div className="rules-outer-div" style={{display: 'none'}}>
                     <div className="rules-inner-div">
-                        <span className="close-btn" onClick={this.closeRulesPopup}>X</span>
+                        <span className="close-btn" onClick={() => closeRulesPopup()}>X</span>
                         <p className="rules-paragraph">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
                         sed do eiusmod tempor incididunt ut labore et dolore magna 
@@ -59,7 +76,6 @@ export default class Home extends React.Component {
         </div>
     </div>
     )
-    }
   }
   
   
