@@ -12,6 +12,9 @@ import { ThemeContext } from "./App";
 
     // const [allUsers, setAllUsers] = useState([]);
     const [popupDisplay, setPopupDisplay] = useState('none');
+    const [newAccountFormDisplay, setNewAccountFormDisplay] = useState('flex');
+    const [confirmDivDisplay, setConfirmDivDisplay] = useState('none');
+
     const [currentUserId, setCurrentUserId] = useState('0');
     const contextUsers = useContext(ThemeContext);
     const [allUsers, setAllUsers] = useState();
@@ -21,10 +24,6 @@ import { ThemeContext } from "./App";
     useEffect(() => {
         setAllUsers(contextUsers);
     }, [contextUsers])
-   
-    function checkAllUsers(){
-      console.log(allUsers)
-    }
 
     //Logging in to a saved account
     function validateLogin(e){
@@ -40,10 +39,6 @@ import { ThemeContext } from "./App";
         setCurrentUserId(matchingUser[0].player_id);
         setHomeBtnDisplay('block')
       } 
-    }
-
-    function checkIfUserIsReady() {
-
     }
 
     //Creating a new account
@@ -78,9 +73,18 @@ import { ThemeContext } from "./App";
           .then(response => {
             let newUser = response.data;
             setCurrentUserId(newUser.player_id)
-            
+            setNewAccountFormDisplay('none')
+            setConfirmDivDisplay('block');
+            getAllUsers()
           })
+      }
 
+      function getAllUsers(){
+        axios.get('http://localhost:8000/player')
+        .then(response => {
+          let returnedUsers = response.data;
+          setAllUsers(returnedUsers);
+        })
       }
     
       //Popup Menu Hiding and Displaying
@@ -112,15 +116,15 @@ import { ThemeContext } from "./App";
               <button type="submit">Login</button>
               <button id="new-account-btn" type="button" onClick={() => openNewAccountDiv()}>Create New Account</button>
           </form>
-
-        <Link id="home-btn" to={"/home"} state={{userId:currentUserId}} style={{display: homeBtnDisplay}}>Go To Home</Link>
+        
+        <Link id="home-btn" to={"/home"} state={{userId:currentUserId}} style={{display: homeBtnDisplay}}>Enter</Link>
 
             <div id="new-account-div" style={{display: popupDisplay}}>
               <div className="new-account-content">
-                <h2>Create New Account</h2>
+                <h2 className="new-account-header">Create New Account</h2>
                 <span className="close-btn" onClick={() => closeNewAccountDiv()}>X</span>
 
-                <form className="new-account-form" onSubmit={(e) => confirmNewAccount(e)} method="post">
+                <form className="new-account-form" style={{display: newAccountFormDisplay}} onSubmit={(e) => confirmNewAccount(e)} method="post">
                   <div className="form-field-div">
                     <label htmlFor="username">Username</label>
                     <input id="new-account-username" type="text" name="username" required/>
@@ -139,7 +143,10 @@ import { ThemeContext } from "./App";
                   <button id="confirm-account-btn" type="submit">Create New Account</button>
 
                 </form>
-                
+                <div className="new-user-approval-div" style={{display: confirmDivDisplay}}>
+                    <h2 className="new-account-header">You're Confirmed!</h2>
+                    <button onClick={() => setPopupDisplay('none')}>Return to Login</button>
+                </div>
               </div>
             </div>
         </div>

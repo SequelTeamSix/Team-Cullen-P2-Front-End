@@ -11,13 +11,15 @@ export default function Home() {
     const location = useLocation();
     const { userId } = location.state;
     const [currentUser, setCurrentUser] = useState();
+    const [leaderboardUsers, setLeaderboardUsers] = useState();
 
     useEffect(() => {
         console.log(userId)
         getUserById(userId);
+        getLeaderBoardData();
 
         function getUserById(id){
-            let url = 'http://localhost:8000/player/id/'+id
+            let url = 'http://localhost:8000/player/id/' + id;
             console.log(url)
             axios.get(url)
             .then(response => {
@@ -26,9 +28,20 @@ export default function Home() {
               setCurrentUser(returnedUser);
             })
           }
-     }, [])
-    
-       
+
+          function getLeaderBoardData(){
+            let url = 'http://localhost:8000/player/';
+            console.log(url)
+            axios.get(url)
+            .then(response => {
+              let returnedUsers = response.data;
+              setLeaderboardUsers(returnedUsers);
+            })
+          }
+
+
+    }, [userId])
+
 
     function openRulesPopup(){
         // setRulesDisplay('block')
@@ -39,13 +52,18 @@ export default function Home() {
       }
 
 
-   
-return (
+return ( leaderboardUsers && currentUser ? 
     <div>
-        <div className="main-page">
-        <p className="current-user">Welcome, {currentUser.username}</p>
-        <Link to="/">Go To Login</Link>
-            <div className="container">
+        <div className="main-page-bg">
+        <div className="main-page-overlay"></div>
+            <div className="home-container">
+                <Link className="login-link" to="/">Return to Login</Link>
+                <div id="current-user-info">
+                    <p className="info current-user-name">Welcome, {currentUser.username}</p>
+                    <p className="info current-points">Points: {currentUser.points}</p>
+                    <p className="info current-wins">Wins: {currentUser.wins}</p>
+                    <p className="info current-loses">Losses: {currentUser.loses}</p>
+                </div>
                 <h3 className="main-title">Superhero Card Duel</h3>
                 <div className="menu">
                     <Link className="menu-link" to="/game">Play Game</Link>
@@ -70,11 +88,20 @@ return (
                 </div>
 
                 <div className="leaderboard-div">
-                    <h3>Leaderboard</h3>
-                </div>
+                    <h3 className="leaderboard-header">Leaderboard</h3>
+                    <div className="leaderboard-users">
+                            <ol>
+                                {
+                                leaderboardUsers.map(user => (
+                                <li className="leaderboard-name" key={user.player_id}>{user.username}</li>
+                            ))
+                                 }
+                            </ol>
+                    </div>
+                </div>  
             </div>
         </div>
-    </div>
+    </div> : <div> Loading...</div>
     )
   }
   

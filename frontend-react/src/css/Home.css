@@ -2,24 +2,66 @@ body {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    background-color: cadetblue;
 }
 
-.main-page {
+.login-link {
+    color: white;
+    text-decoration: none;
+    margin: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: .2s ease;
+}
+
+.login-link:hover {
+    color:#3C3744;
+}
+
+.main-page-bg {
     position: relative;
+    background: url(../images/home-bg.png);
+    background-position: center;
+    background-size: cover;
+    
 }
 
-.current-user {
+.main-page-overlay {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(61, 82, 213, .8);
+    
+}
+
+#current-user-info {
+    background-color: rgba(255, 255, 255, .8);
+    padding: 20px;
     position: absolute;
     top: 0;
     right: 0;
     margin: 25px 50px;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 
-.container {
+.current-user-name {
+   color: rgba(61, 82, 213, 1);
+  
+}
+
+.info {
+    margin-bottom: 5px;
+}
+
+.home-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     max-width: 1200px;
     margin: 0 auto;
-    text-align: center;
     padding: 20px;
 }
 
@@ -36,10 +78,11 @@ body {
 }
 
 .menu-link {
+    text-align: center;
     margin-top: 0;
     font-size: 24px;
-    color: black;
-    background-color: white;
+    color: white;
+    background-color: rgba(186, 18, 0, .77);
     text-decoration: none;
     padding: 15px;
     border-radius: 5px;
@@ -51,6 +94,9 @@ body {
     cursor: pointer;
 }
 
+.menu-link:hover {
+    background-color: rgba(186, 18, 0, 1);
+}
 
 .menu-link:hover {
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -105,5 +151,18 @@ body {
     min-height: 400px;
     background-color: white;
     padding: 20px;
+    margin: 0 20px;
     border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+.leaderboard-header {
+    font-size: 28px;
+    margin: 5px 10px;
+    color: #3C3744;
+}
+
+.leaderboard-name {
+    margin-left: 12px;
+    margin-bottom: 10px;
 }
