@@ -1,3 +1,25 @@
+.store-bg {
+    height: 100vh;
+    position: relative;
+    background: url('../images/superhero-bg-blue.jpeg');
+    background-position: center;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.store-overlay {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(61, 82, 213, .3);
+}
+
+.padding {
+    padding: 40px 20px;
+}
+
 .store-container {
     display: flex;
     flex-direction: column;
@@ -6,9 +28,12 @@
     max-width: 1200px;
     background-color: white;
     min-height: 800px;
-    margin: 50px auto;
+    margin: auto;
     position: relative;
     padding: 0 20px;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+
 }
 
 .home-link {
@@ -20,6 +45,13 @@
     color: black;
 }
 
+.store-header {
+    color: rgba(9, 12, 155, 1);
+    font-size: 3vw;
+    font-family: 'Bangers', cursive;
+    letter-spacing: 2px;
+}
+
 .user-points {
     position: absolute;
     top: 0;
@@ -28,7 +60,6 @@
 }
 
 .store-contents {
-    margin-top: 80px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -36,7 +67,8 @@
 }
 
 .info-paragraph {
-    max-width: 500px;
+    max-width: 600px;
+    font-size: 18px;
     text-align: center;
 }
 
@@ -82,14 +114,22 @@
 
 .purchase-popup-inner-div{
     padding: 50px;
-    margin: 50px auto;
+    margin: 20px auto;
     min-height: 60%;
     height: auto;
     width: 70%;
-    background-color: white;;
+    background: rgb(90,143,191);
+    background: linear-gradient(360deg, rgba(90,143,191,1) 2%, rgba(161,191,219,1) 100%, rgba(24,181,158,1) 100%, rgba(8,124,160,1) 100%, rgba(0,212,255,1) 100%);
     position: relative;
     display: flex;
     flex-direction: column;
+}
+
+.popup-header {
+    color: white;
+    font-size: 3vw;
+    font-family: 'Bangers', cursive;
+    letter-spacing: 2px;
 }
 
 .purchase-content {
@@ -98,6 +138,13 @@
     justify-content: center;
     align-items: center;
     width: 100%;
+}
+
+.purchase-paragraph {
+    color: white;
+    max-width: 600px;
+    font-size: 18px;
+    text-align: center;
 }
 
 .new-cards-div {

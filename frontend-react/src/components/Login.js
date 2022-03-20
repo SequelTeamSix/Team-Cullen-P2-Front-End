@@ -5,12 +5,13 @@ import '../css/Login.css';
 import { Link } from 'react-router-dom';
 import { render } from "react-dom";
 import { ThemeContext } from "./App";
-
+import stan from "../images/stan-lee.png";
 
 
  export default function Login() {
 
     // const [allUsers, setAllUsers] = useState([]);
+    const [mainLoginDisplay, setMainLoginDisplay] = useState('flex');
     const [popupDisplay, setPopupDisplay] = useState('none');
     const [newAccountFormDisplay, setNewAccountFormDisplay] = useState('flex');
     const [confirmDivDisplay, setConfirmDivDisplay] = useState('none');
@@ -33,10 +34,14 @@ import { ThemeContext } from "./App";
     
       let matchingUser = allUsers.filter(user => user.username === providedUsername);
       if (matchingUser.length === 0){
-        alert('Incorrect Username/Password')
+        alert('Username not found')
+        return;
+      } else if (matchingUser[0].password !== providedPassword){
+        alert('Incorrect Password')
         return;
       } else if (matchingUser[0].password === providedPassword){
         setCurrentUserId(matchingUser[0].player_id);
+        setMainLoginDisplay('none')
         setHomeBtnDisplay('block')
       } 
     }
@@ -102,7 +107,7 @@ import { ThemeContext } from "./App";
          <div className="bg-overlay"></div>
         <h1 className="main-title">Superhero Dueling Cards</h1>
         <div className="login-container">
-          <form className="login-form" onSubmit={(e) => validateLogin(e)} method="post">
+          <form className="login-form" onSubmit={(e) => validateLogin(e)} method="post" style={{display: mainLoginDisplay}}>
               <div className="form-field-div">
                 <label htmlFor="username">Username</label>
                 <input id="login-username" type="text" name="username" required/>
@@ -117,7 +122,11 @@ import { ThemeContext } from "./App";
               <button id="new-account-btn" type="button" onClick={() => openNewAccountDiv()}>Create New Account</button>
           </form>
         
-        <Link id="home-btn" to={"/home"} state={{userId:currentUserId}} style={{display: homeBtnDisplay}}>Enter</Link>
+        <div style={{display: homeBtnDisplay}}>
+          <h3 className="assemble">Players, Assemble!</h3>
+          <img className="stan-lee" alt="Stan Lee" src={stan}></img>
+          <Link style={{display: homeBtnDisplay}} id="home-btn" to={"/home"} state={{userId:currentUserId}}>Enter</Link>
+        </div>
 
             <div id="new-account-div" style={{display: popupDisplay}}>
               <div className="new-account-content">

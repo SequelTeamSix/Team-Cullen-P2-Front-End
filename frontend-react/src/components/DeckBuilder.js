@@ -1,10 +1,12 @@
 import React from "react";
 // import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import '../css/DeckBuilder.css';
 
 
 function DeckBuilder() {
+    const location = useLocation();
+    const { userId } = location.state;
 
     const gameplayCardSlots = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
     const gameplayCardsArray = [];
@@ -23,7 +25,7 @@ function DeckBuilder() {
     return (
       <div>
         <div className="builder-container">
-            <Link className="home-link" to="/home">Back To Home</Link>
+            <Link className="home-link" to="/home" state={{userId: userId}}>Back To Home</Link>
             <h1>Deck Builder</h1>
             <div className="gameplay-build">
                <h2 className="deck-title">Gameplay Deck</h2>

@@ -4,19 +4,19 @@ import axios from 'axios';
 import { useState, useEffect, useContext } from 'react';
 import { Link, useLocation} from 'react-router-dom';
 import { ThemeContext } from "./App";
-
-
+import Leaderboard from "./Leaderboard";
 
 export default function Home() {
+
     const location = useLocation();
     const { userId } = location.state;
+    
     const [currentUser, setCurrentUser] = useState();
-    const [leaderboardUsers, setLeaderboardUsers] = useState();
+    const [rulesDisplay, setRulesDisplay] = useState('none')
 
     useEffect(() => {
         console.log(userId)
         getUserById(userId);
-        getLeaderBoardData();
 
         function getUserById(id){
             let url = 'http://localhost:8000/player/id/' + id;
@@ -28,31 +28,18 @@ export default function Home() {
               setCurrentUser(returnedUser);
             })
           }
-
-          function getLeaderBoardData(){
-            let url = 'http://localhost:8000/player/';
-            console.log(url)
-            axios.get(url)
-            .then(response => {
-              let returnedUsers = response.data;
-              setLeaderboardUsers(returnedUsers);
-            })
-          }
-
-
     }, [userId])
 
-
     function openRulesPopup(){
-        // setRulesDisplay('block')
+        setRulesDisplay('block')
       }
 
       function closeRulesPopup(){
-        // setRulesDisplay('none')
+        setRulesDisplay('none')
       }
 
 
-return ( leaderboardUsers && currentUser ? 
+return ( currentUser ? 
     <div>
         <div className="main-page-bg">
         <div className="main-page-overlay"></div>
@@ -63,18 +50,20 @@ return ( leaderboardUsers && currentUser ?
                     <p className="info current-points">Points: {currentUser.points}</p>
                     <p className="info current-wins">Wins: {currentUser.wins}</p>
                     <p className="info current-loses">Losses: {currentUser.loses}</p>
+                    <p className="info current-cards">Cards: </p>
                 </div>
-                <h3 className="main-title">Superhero Card Duel</h3>
+                <h1 className="main-title">Superhero Card Duel</h1>
                 <div className="menu">
-                    <Link className="menu-link" to="/game">Play Game</Link>
-                    <Link className="menu-link" to="/store">Visit Store</Link>
-                    <Link className="menu-link" to="/deckbuilder">My Deck Builder</Link>
+                    <Link className="menu-link" to="/game" state={{userId:currentUser.player_id}}>Play Game</Link>
+                    <Link className="menu-link" to="/store" state={{userId:currentUser.player_id}}>Visit Store</Link>
+                    <Link className="menu-link" to="/deckbuilder" state={{userId:currentUser.player_id}}>My Deck Builder</Link>
                     <p className="menu-link" onClick={() => openRulesPopup()}>Read Rules</p>
                 </div>
 
-                <div className="rules-outer-div" style={{display: 'none'}}>
+                <div className="rules-outer-div" style={{display: rulesDisplay}}>
                     <div className="rules-inner-div">
                         <span className="close-btn" onClick={() => closeRulesPopup()}>X</span>
+                        <h2 className="rules-header">Rules</h2>
                         <p className="rules-paragraph">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
                         sed do eiusmod tempor incididunt ut labore et dolore magna 
@@ -86,19 +75,9 @@ return ( leaderboardUsers && currentUser ?
                         </p>
                     </div>
                 </div>
-
-                <div className="leaderboard-div">
-                    <h3 className="leaderboard-header">Leaderboard</h3>
-                    <div className="leaderboard-users">
-                            <ol>
-                                {
-                                leaderboardUsers.map(user => (
-                                <li className="leaderboard-name" key={user.player_id}>{user.username}</li>
-                            ))
-                                 }
-                            </ol>
-                    </div>
-                </div>  
+                
+                <Leaderboard />
+            
             </div>
         </div>
     </div> : <div> Loading...</div>

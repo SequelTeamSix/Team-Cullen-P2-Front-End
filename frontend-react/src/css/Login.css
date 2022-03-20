@@ -179,5 +179,12 @@ button {
 
 #home-btn:hover {
     background-color: rgba(9, 12, 155, 1)
-
+}
+.assemble {
+    font-family: 'Bangers', cursive;
+    color: rgba(9, 12, 155, 1);
+    font-size: 3vw;
+} 
+.stan-lee {
+    height: 300px;
 }

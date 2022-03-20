@@ -1,13 +1,31 @@
-import React from "react";
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
+import { Link, useLocation } from 'react-router-dom';
 import '../css/Store.css';
 
 
 
-function Store() {
+export default function Store() {
+    const location = useLocation();
+    const { userId } = location.state;
 
+    const [storeUser, setStoreUser] = useState();
     const [purchaseDisplay, setPurchaseDisplay] = useState('none');
+
+    useEffect(() => {
+
+        getStoreUserDetails(userId)
+
+        function getStoreUserDetails(id){
+            let url = 'http://localhost:8000/player/id/' + id;
+            console.log(url)
+            axios.get(url)
+            .then(response => {
+              let returnedUser = response.data;
+              setStoreUser(returnedUser);
+            })
+        }
+    }, [])
 
     function openPurchasePopup(){
         setPurchaseDisplay('block')
@@ -17,13 +35,14 @@ function Store() {
         setPurchaseDisplay('none')
       }
 
-    return (
-      <div className="login-div">
-
+return ( storeUser ? 
+      <div className="store-bg">
+          <div className="store-overlay"></div>
+          <div className="padding">
             <div className="store-container">
-                <h1>Store</h1>
-                <Link className="home-link" to="/home">Back To Home</Link>
-                <p class="user-points">Your Points: 120</p>
+                <h1 className="store-header">Store</h1>
+                <Link className="home-link" to="/home" state={{userId: userId}}>Back To Home</Link>
+                <p class="user-points">Your Points: {storeUser.points}</p>
 
                 <div className="store-contents">
                         <h2>Upgrade Your Deck!</h2>
@@ -54,29 +73,20 @@ function Store() {
                     <div className="purchase-popup-inner-div">
                     <span className="close-btn" onClick={closePurchasePopup}>X</span>
                     <div className="purchase-content">
-                        <h2>Here's What You Got!</h2>
+                        <h2 className="popup-header">Here's What You Got!</h2>
                         <div className="new-cards-div">
                             <div className="new-card"></div>
                             <div className="new-card"></div>
                             <div className="new-card"></div>
                             <div className="new-card"></div>
                         </div>
-                        <h3 className="info-paragraph">Nice! These cards will be added to your inventory. Head over to the deck builder to customize your deck for your next game.</h3>
+                        <h3 className="purchase-paragraph">Nice! These cards will be added to your inventory. Head over to the deck builder to customize your deck for your next game.</h3>
                     </div>
                     </div>
                 </div>
 
             </div>
-
-
-
-
-
-
-
-      </div>
-    );
+            </div>
+            </div> : <div> Loading...</div>
+    )
   }
-  
-  export default Store;
-  

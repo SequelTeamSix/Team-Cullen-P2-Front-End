@@ -1,10 +1,13 @@
 import React from "react";
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import '../css/Game.css';
 
 
 function Game() {
+
+    const location = useLocation();
+    const { userId } = location.state;
 
     const [rulesDisplay, setRulesDisplay] = useState('none');
     const [endDisplay, setEndDisplay] = useState('none');
@@ -28,11 +31,12 @@ function Game() {
     return (
       <div>
           <div className="main-game-div">
+              <div className="main-overlay"></div>
             <div className="toggle-container">
                 <div className="rules-toggle" onClick={openRulesPopup}>
                     <p>Rules</p>
                 </div>
-                <Link className="quit-btn" to="/home">Quit</Link>
+                <Link className="quit-btn" to="/home" state={{userId: userId}}>Quit</Link>
                 <p onClick={openEndPopup}>Test End Screen</p>
             </div>
 
@@ -40,6 +44,7 @@ function Game() {
             <div className="rules-outer-div" style={{display: rulesDisplay}}>
                 <div className="rules-inner-div">
                     <span className="close-btn" onClick={closeRulesPopup}>X</span>
+                    <h2 className="rules-header">Rules</h2>
                     <p className="rules-paragraph">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
                     sed do eiusmod tempor incididunt ut labore et dolore magna 
@@ -57,7 +62,7 @@ function Game() {
                     <div className="end-screen-content">
                         <h3>You Win or Lose</h3>
                         <p className="end-screen-btn">Play Again With Same Deck</p>
-                        <Link className="end-screen-btn" to="/home">Quit</Link>
+                        <Link className="end-screen-btn" to="/home" state={{userId: userId}}>Quit</Link>
                     </div>
                 </div>
             </div>

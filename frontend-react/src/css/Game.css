@@ -11,15 +11,32 @@ p {
 
 .main-game-div {
     position: relative;
+    background: url('../images/home-bg.png');
+    background-position: center;
+    background-size: cover;
+    height: 100vh;
+    min-height: 1200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-overlay {
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    min-height: 1200px;
+    background-color: rgba(61, 82, 213, .3);
 }
 
 .toggle-container {
     display: flex;
-   align-items: center;
+    flex-direction: column;
+    align-items: center;
     position: absolute;
     margin: 25px;
     top: 0;
-    right: 0;
+    left: 0;
     z-index: 15;
 }
 
@@ -34,7 +51,7 @@ p {
     align-items: center;
     text-decoration: none;
     color: black;
-    margin-right: 10px;
+    margin: 10px;
     padding: 10px;
     cursor: pointer;
     transition: .5s ease;
@@ -46,21 +63,22 @@ p {
 }
 
 .game-container {
+    width: 100%;
+    border-radius: 5px;
     position: relative;
     max-width: 1200px;
     min-height: 1000px;
-    background-color: navy;
-    margin: 20px auto;
+    background-color: rgba(61, 82, 213, .7);
+    margin: auto;
     padding: 20px;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 
 .computer-field {
     padding: 20px;
-    height: 25%;
-    
     position: absolute;
     top: 2%;
     margin-left: 15px;
@@ -132,7 +150,7 @@ p {
 }
 
 .dueling-field {
-    height: 50%;
+    
     display: flex;
     position: relative;
 }
@@ -156,7 +174,7 @@ p {
 
 .player-field {
     padding: 20px;
-    height: 25%;
+    
     position: absolute;
     bottom: 2%;
     margin-left: 15px;
@@ -182,8 +200,8 @@ p {
     padding: 50px;
     margin: 0 auto;
     height: 80%;
-    width: 70%;
-    background-color: white;;
+    width: 50%;
+    background-color: white;
     position: relative;
     display: flex;
     flex-direction: column;
