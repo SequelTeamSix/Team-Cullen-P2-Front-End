@@ -95,9 +95,25 @@
 }
 
 .deck-pack-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Bangers', cursive;
+    font-size: 6vw;
     height: 80%;
     width: 100%;
-    background-color: cornflowerblue;
+    background: url(../images/deck-bg.jpg);
+    background-position: center;
+    background-size: cover;
+    border-radius: 2px;
+    border: 1px solid black;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    transition: .2s ease;
+}
+
+.deck-pack-image:hover {
+    transform: scale(1.01);
+    transform: rotate(1deg);
 }
 
 .buy-btn {

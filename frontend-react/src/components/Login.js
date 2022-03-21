@@ -110,7 +110,6 @@ import stan from "../images/stan-lee.png";
        <div className="login-bg">
          <div className="bg-overlay"></div>
         <h1 className="main-title">Superhero Dueling Cards</h1>
-        {/* <img src="https://imgur.com/a/ARyGFPO" alt="Thanos"></img> */}
         <div className="login-container">
           <form className="login-form" onSubmit={(e) => validateLogin(e)} method="post" style={{display: mainLoginDisplay}}>
               <div className="form-field-div">

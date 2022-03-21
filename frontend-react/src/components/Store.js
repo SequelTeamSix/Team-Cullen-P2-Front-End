@@ -188,19 +188,25 @@ return ( storeUser ?
                         <p className="info-paragraph">Choose to spend your game points on new cards to make your deck more competitive! Each pack contains 4 cards of varying rarity.</p>
                         <div className="pack-options-div">
                             <div className="deck-pack common">
-                                <div className="deck-pack-image"></div>
+                                <div className="deck-pack-image">
+                                    <p className="question-mark">?</p>
+                                </div>
                                 <h3 className="pack-type">Common Pack</h3>
                                 <span className="pack-cost">30 Points</span>
                                 <button className="buy-btn" onClick={() => buyCommonPack()}>Buy Pack</button>
                             </div>
                             <div className="deck-pack rare">
-                                <div className="deck-pack-image"></div>
+                                <div className="deck-pack-image">
+                                    <p className="question-mark">?</p>
+                                </div>
                                 <h3 className="pack-type">Rare Pack</h3>
                                 <span className="pack-cost">60 Points</span>
                                 <button className="buy-btn" onClick={() => buyRarePack()}>Buy Pack</button>
                             </div>
                             <div className="deck-pack ultra-rare">
-                                <div className="deck-pack-image"></div>
+                                <div className="deck-pack-image">
+                                    <p className="question-mark">?</p>
+                                </div>
                                 <h3 className="pack-type">Ultra-Rare Pack</h3>
                                 <span className="pack-cost">120 Points</span>
                                 <button className="buy-btn" onClick={() => buyUltraRarePack()}>Buy Pack</button>

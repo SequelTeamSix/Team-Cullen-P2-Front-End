@@ -4,11 +4,39 @@
     justify-content: flex-start;
     align-items: center;
     max-width: 1400px;
-    background-color: white;
+    background: rgb(255,255,255);
+    background: linear-gradient(180deg, rgba(255,255,255,1) 2%, rgba(161,191,219,1) 100%, rgba(24,181,158,1) 100%, rgba(8,124,160,1) 100%, rgba(0,212,255,1) 100%);
     min-height: 800px;
-    margin: 50px auto;
+    margin: auto;
     position: relative;
     padding: 20px;
+}
+
+.builder-bg {
+    background: url('../images/comic-bg.jpeg');
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.builder-overlay {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(61, 82, 213, .6);
+}
+
+.builder-title {
+    color: rgba(9, 12, 155, 1);
+    z-index: 10;
+    font-family: 'Bangers', cursive;
+    font-size: 4vw;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
 }
 
 .gameplay-build,
@@ -25,17 +53,77 @@
     margin: 20px auto;
 }
 
-.gameplay-card-slot,
-.owned-card-slot {
-    height: 150px;
-    width: 100px;
-    margin: 10px;
-    padding: 10px;
-    background-color: slategray;
+.gameplay-card-slot {
+    background: linear-gradient(180deg, rgb(148, 148, 179) 2%, rgb(17, 64, 108) 100%, rgba(24,181,158,1) 100%, rgba(8,124,160,1) 100%, rgba(0,212,255,1) 100%);
+    font-size: 1.2vw;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.deck-title,
+.gameplay-card-slot,
+.owned-card-slot {
+    height: 15vw;
+    width: 10vw;
+    margin: 10px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    border-radius: 2px;
+    border: 1px solid black;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    transition: .2s ease;
+    cursor: pointer;
+}
+
+.owned-card-slot:hover,
+.gameplay-card-slot:hover {
+    transform: scale(1.01);
+}
+
+.owned-card-banner{
+    padding: 10px 0;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    bottom: 0;
+    background: linear-gradient(180deg, rgb(36, 36, 184) 2%, rgb(17, 64, 108) 100%, rgba(24,181,158,1) 100%, rgba(8,124,160,1) 100%, rgba(0,212,255,1) 100%);
+    width: 100%;
+}
+
+.owned-card-title {
+    color: white;
+    z-index: 10;
+    font-family: 'Bangers', cursive;
+    font-size: 1.3vw;
+    letter-spacing: 1px;
+}
+
+.owned-card-power {
+    background: linear-gradient(180deg, rgb(227, 221, 45) 2%, rgb(208, 193, 25) 100%);
+    font-size: 1.2vw;
+    height: 30px;
+    width: 30px;
+    padding: 5px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+    box-shadow: rgba(255, 255, 255, 0.24) 0px 3px 8px;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.deck-title {
+   padding-left: 10px;
+   font-size: 1.;
+}
 .deck-description {
     padding-left: 10px;
+    font-size: 1.2vw;
 }
 

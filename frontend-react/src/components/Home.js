@@ -1,50 +1,49 @@
 import React from "react";
 import '../css/Home.css';
 import axios from 'axios';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation} from 'react-router-dom';
-import { ThemeContext } from "./App";
 import Leaderboard from "./Leaderboard";
 
 export default function Home() {
 
     const location = useLocation();
     const { userId } = location.state;
-    
+
     const [currentUser, setCurrentUser] = useState();
     const [rulesDisplay, setRulesDisplay] = useState('none');
     const [currentUsersCards, setCurrentUsersCards] = useState();
-    const [previewDisplay, setPreviewDisplay] = useState('block')
+    const [previewDisplay, setPreviewDisplay] = useState('flex');
+
+    // if(currentUser.wins === 0 && currentUser.loses === 0){
+    //     setPreviewDisplay('flex')
+    // }
 
     useEffect(() => {
-        console.log(userId)
         getUserById(userId);
         getUsersCards(userId)
     
         function getUserById(id){
             let url = 'http://localhost:8000/player/id/' + id;
-            console.log(url)
             axios.get(url)
             .then(response => {
               let returnedUser = response.data;
-              console.log(returnedUser)
               setCurrentUser(returnedUser);
             })
           }
 
-    function getUsersCards(id){
-        let url = 'http://localhost:8000/ownedcards/player/' + id;
-        axios.get(url)
-        .then(response => {
-          let returnedUsersCards = response.data;
-          console.log(id)
-          console.log(returnedUsersCards)
-          setCurrentUsersCards(returnedUsersCards);
-        })
-      }
-}, [userId])
+        function getUsersCards(id){
+            let url = 'http://localhost:8000/ownedcards/player/' + id;
+            axios.get(url)
+            .then(response => {
+            let returnedUsersCards = response.data;
+            setCurrentUsersCards(returnedUsersCards);
+            })
+        }
+        }, [userId])
 
-    function openRulesPopup(){
+ 
+      function openRulesPopup(){
         setRulesDisplay('block')
       }
 
@@ -55,10 +54,11 @@ export default function Home() {
       function closePreviewPopup(){
         setPreviewDisplay('none')
       }
-
-    
+      
+      
 
 return ( currentUser && currentUsersCards ? 
+    
     <div>
         <div className="main-page-bg">
         <div className="main-page-overlay"></div>
@@ -79,24 +79,26 @@ return ( currentUser && currentUsersCards ?
                     <p className="menu-link" onClick={() => openRulesPopup()}>Read Rules</p>
                 </div>
 
-                <div className="new-deck-preview" style={{display: previewDisplay}}>
-                    <h2>Preview Your New Cards!</h2>
+                <div className="new-deck-outer" style={{display: previewDisplay}}>
+                <div className="new-deck-preview" >
+                    <h2 className="preview-heading">Welcome to the Fight!</h2>
+                    <p className="preview-paragraph">Here's a starting deck of 20 cards. The power level of each character is 
+                        indicated on the top right. More cards can be purchased as you earn points. 
+                        Try to collect them all!</p>
                     <span className="close-btn" onClick={() => closePreviewPopup()}>X</span>
-                    <div>
-
-                        {console.log(currentUsersCards)}
+                    <div className="new-cards-grid">
                     {
                         currentUsersCards.map(arrayOfCards => (
-                            <div className="preview-card" key={arrayOfCards.card.set_id}>
+                            <div className="preview-card" key={arrayOfCards.set_id} style={{backgroundImage: `url(${arrayOfCards.card.image_url})`}}>
+                               <div className="preview-card-banner">
                                 <p className="preview-card-title">{arrayOfCards.card.card_name}</p>
-                                <p className="preview-card-power">{arrayOfCards.card.power}</p>
-                                <img src={arrayOfCards.card.image_url} alt={arrayOfCards.card.card_name}></img>
+                               </div>
+                               <p className="preview-card-power">{arrayOfCards.card.power}</p>
                             </div>
                         ))
                     }
                     </div>
-                  
-                    
+                </div>
                 </div>
 
                 <div className="rules-outer-div" style={{display: rulesDisplay}}>

@@ -1,6 +1,6 @@
 .leaderboard-div {
     width: 100%;
-    min-height: 400px;
+    min-height: 200px;
     background: rgb(255,255,255);
     background: linear-gradient(180deg, rgba(255,255,255,1) 2%, rgba(161,191,219,1) 100%, rgba(24,181,158,1) 100%, rgba(8,124,160,1) 100%, rgba(0,212,255,1) 100%);
     padding: 20px;
