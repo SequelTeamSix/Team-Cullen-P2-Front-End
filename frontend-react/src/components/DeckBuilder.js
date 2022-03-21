@@ -5,7 +5,6 @@ import axios from 'axios';
 import '../css/DeckBuilder.css';
 import GameplayCardsList from "./GameplayCardsList";
 
-
 function DeckBuilder() {
     const location = useLocation();
     const { userId } = location.state;

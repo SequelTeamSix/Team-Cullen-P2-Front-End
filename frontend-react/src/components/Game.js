@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect, Template, Fragment } from "react";
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import '../css/Game.css';
-
+import axios from 'axios';
 
 function Game() {
 
@@ -11,7 +11,88 @@ function Game() {
 
     const [rulesDisplay, setRulesDisplay] = useState('none');
     const [endDisplay, setEndDisplay] = useState('none');
+   
+    const [fiveDisplayedCards, setFiveDisplayedCards] = useState([]);
+    const [playerCardInPlay, setPlayerCardInPlay] = useState([]);
+    const [ComputerCardInPlay, setComputerCardInPlay] = useState([]);
 
+    let allCardsForComputer = [];
+    let playersRandomizedDeck = [];
+    let fiveCards =[];
+   
+    useEffect(() => {
+        let playerDeckUrl = 'http://localhost:8000/deck/player/' + userId;
+        axios.get(playerDeckUrl)
+        .then(response => { 
+          let playerDeck = response.data;
+          randomizeDeck(playerDeck)
+        })
+
+        let computerDeckUrl = 'http://localhost:8000/card';
+        axios.get(computerDeckUrl)
+        .then(response => { 
+          let allCards = response.data;
+          allCards.map(card => (
+            allCardsForComputer.push(card)
+          )) 
+          
+        })
+
+    }, [])
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+          drawCard(5)
+          console.log(allCardsForComputer)
+        }, 1500);
+        return () => clearTimeout(timer);
+      }, []);
+
+
+    function randomizeDeck(cards){
+        for(let i = 0; i < cards.length; i++){
+            let randomIndex = Math.floor(Math.random() * cards.length);
+            playersRandomizedDeck.push(cards[randomIndex]);
+        }
+      }
+
+      function drawCard(amount){
+        for(let i = 0; i < amount; i++){
+          let newCard = playersRandomizedDeck[i];
+          fiveCards.push(newCard)
+          playersRandomizedDeck.splice(i, 1)
+        }
+        setFiveDisplayedCards(fiveCards)
+    }
+
+    function playCard(e){
+        console.log(e.target)
+        let playerCard = (
+            <Fragment>
+               <div className="card-in-play" key={Math.random()} style={{backgroundImage: `url(${e.target.lastElementChild.innerHTML})`}}>
+                    <div className="play-card-banner">
+                        <p className="play-card-title">{e.target.firstElementChild.firstElementChild.innerHTML}</p>
+                    </div>
+                <p className="play-card-power">{e.target.getElementsByClassName('play-card-power')[0].innerHTML}</p>
+                </div>
+            </Fragment>
+          )
+        setPlayerCardInPlay(playerCard)
+
+        let randomIndex = Math.floor(Math.random() * allCardsForComputer.length)
+        let computerCard = (
+            <Fragment>
+               <div className="card-in-play" key={Math.random()} style={{backgroundImage: `url(${allCardsForComputer[randomIndex]})`}}>
+                    <div className="play-card-banner">
+                        <p className="play-card-title">{e.target.firstElementChild.firstElementChild.innerHTML}</p>
+                    </div>
+                <p className="play-card-power">{e.target.getElementsByClassName('play-card-power')[0].innerHTML}</p>
+                </div>
+            </Fragment>
+          )
+        setComputerCardInPlay(computerCard)
+    }
+      
     function openRulesPopup(){
         setRulesDisplay('block')
       }
@@ -27,8 +108,8 @@ function Game() {
       function closeEndPopup(){
         setEndDisplay('none')
       }
-
-    return (
+    
+return ( fiveDisplayedCards && fiveCards ? 
       <div>
           <div className="main-game-div">
               <div className="main-overlay"></div>
@@ -57,7 +138,7 @@ function Game() {
                 </div>
             </div>{/* End Game Popup */}
             <div className="end-game-outer-div" style={{display: endDisplay}}>
-                {/* <div className="win-game-inner-div">
+                <div className="win-game-inner-div">
                 <div className="end-screen-overlay"></div>
                     <span className="close-btn" onClick={closeEndPopup}>X</span>
                     <div className="end-screen-content">
@@ -65,7 +146,8 @@ function Game() {
                         <p className="end-screen-btn">Play Again With Same Deck</p>
                         <Link className="end-screen-btn" to="/home" state={{userId: userId}}>Quit</Link>
                     </div>
-                </div> */}
+                </div>
+
                 <div className="lose-game-inner-div">
                     <div className="end-screen-overlay"></div>
                     <span className="close-btn" onClick={closeEndPopup}>X</span>
@@ -81,37 +163,26 @@ function Game() {
                 <div className="computer-field">
                     <div className="five-cards-div">
                         <div className="deck-container">
-                            <div className="card" id="computer-deck">
-                                <p>Computer Deck</p>
-                            </div>
+                            <div className="card" id="computer-deck"></div>
                             <div className="card undercard1"></div>
                             <div className="card undercard2"></div>
                         </div>
                         
-                        <div className="card" id="computer-card-1">
-                            <p>Computer Card 1</p>
-                        </div>
-                        <div className="card" id="computer-card-2">
-                            <p>Computer Card 2</p>
-                        </div>
-                        <div className="card" id="computer-card-3">
-                            <p>Computer Card 3</p>
-                        </div>
-                        <div className="card" id="computer-card-4">
-                            <p>Computer Card 4</p>
-                        </div>
-                        <div className="card" id="computer-card-5">
-                            <p>Computer Card 5</p>
-                        </div>
+                        <div className="card computer-card"></div>
+                        <div className="card computer-card"></div>
+                        <div className="card computer-card"></div>
+                        <div className="card computer-card"></div>
+                        <div className="card computer-card"></div>
+
                     </div>
                 </div>
 
                 <div className="dueling-field">
-                    <div className="computer-card-in-play card">
-                        <p>Computer card in play</p>
+                    <div className="computer-card-in-play">
+                        {ComputerCardInPlay}
                     </div>
-                    <div className="player-card-in-play card">
-                        <p>Player card in play</p>
+                    <div className="player-card-in-play">
+                        {playerCardInPlay}
                     </div>
                     <div className="scoring-container">
                         <p className="computer-score">Computer: 3</p>
@@ -121,25 +192,17 @@ function Game() {
 
                 <div className="player-field">
                     <div className="five-cards-div">
-                        <div className="card right" id="computer-card-1">
-                            <p>Player Card 1</p>
-                        </div>
-                        <div className="card right" id="computer-card-2">
-                            <p>Player Card 2</p>
-                        </div>
-                        <div className="card right" id="computer-card-3">
-                            <p>Player Card 3</p>
-                        </div>
-                        <div className="card right" id="computer-card-4">
-                            <p>Player Card 4</p>
-                        </div>
-                        <div className="card right" id="computer-card-5">
-                            <p>Player Card 5</p>
-                        </div>
-                        <div className="deck-container">
-                            <div className="card" id="player-deck">
-                                <p>Player Deck</p>
+                        {fiveDisplayedCards.map(card => (
+                            <div className="card" onClick={(e)=>playCard(e)} key={Math.random()} style={{backgroundImage: `url(${card.card.image_url})`}}>
+                                <div className="play-card-banner">
+                                 <p className="play-card-title">{card.card.card_name}</p>
+                                </div>
+                            <p className="play-card-power">{card.card.power}</p>
+                            <p className="hidden-image-url">{card.card.image_url}</p>
                             </div>
+                        ))}
+                        <div className="deck-container">
+                            <div className="card" id="player-deck"></div>
                             <div className="card undercard1"></div>
                             <div className="card undercard2"></div>
                         </div>
@@ -151,9 +214,8 @@ function Game() {
             </div>
 
           </div>
-      </div>
-    );
-  }
+    </div> : <div> Loading...</div>
+      )}
   
   export default Game;
   

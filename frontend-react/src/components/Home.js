@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation} from 'react-router-dom';
 import Leaderboard from "./Leaderboard";
 
+
 export default function Home() {
 
     const location = useLocation();
@@ -55,7 +56,7 @@ export default function Home() {
         setPreviewDisplay('none')
       }
       
-      
+   
 
 return ( currentUser && currentUsersCards ? 
     
