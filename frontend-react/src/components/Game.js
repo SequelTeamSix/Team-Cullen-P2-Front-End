@@ -46,13 +46,12 @@ function Game() {
                     <span className="close-btn" onClick={closeRulesPopup}>X</span>
                     <h2 className="rules-header">Rules</h2>
                     <p className="rules-paragraph">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-                    sed do eiusmod tempor incididunt ut labore et dolore magna 
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco 
-                    laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor 
-                    in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt 
-                    mollit anim id est laborum.
+                    Each player draws 5 cards at the start of the game. Each turn, both players
+                    choose which card to play to the center at the same time. The cards fight each other
+                    and the one with the higher power value wins. The winning player will then get +1 to their score
+                    and both cards are discarded (regardless of whether they won or lost). Ties reward no score
+                    to either player. Each player then draws a newcard from their deck and they keep playing. 
+                    First player to get a score of 10 wins. 
                     </p>
                 </div>
             </div>{/* End Game Popup */}
