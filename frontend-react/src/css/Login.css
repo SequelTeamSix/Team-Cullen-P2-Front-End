@@ -43,6 +43,7 @@ body {
     max-width: 1200px;
     margin: 50px auto;
     text-align: center;
+    border-radius: 5px;
     padding: 60px;
     z-index: 10;
     background-color: rgba(255, 255, 255, .5);
@@ -79,6 +80,7 @@ input {
 button {
     margin-top: 10px;
     font-family: 'Varela Round', sans-serif;
+    font-size: 1.2vw;
     background-color: rgba(186, 18, 0, .77);
     padding: 10px 20px;
     min-width: 180px;
@@ -95,9 +97,10 @@ button:hover {
 }
 
 label,
-input,
-button {
+input
+{
     margin-bottom: 10px;
+    font-size: 1.5vw;
 }
 
 #new-account-div {
@@ -110,24 +113,25 @@ button {
     left: 0; 
     right: 0; 
     margin-left: auto; 
-    margin-right: auto; 
+    margin-right: auto;
 }
 
 .new-account-content {
     padding: 20px;
-    margin: 0 auto;
-    height: 80%;
+    margin: 100px auto;
+    min-height: 60%;
+    height: auto;
     width: 50%;
     background: rgb(90,143,191);
     background: linear-gradient(360deg, rgba(90,143,191,1) 2%, rgba(161,191,219,1) 100%, rgba(24,181,158,1) 100%, rgba(8,124,160,1) 100%, rgba(0,212,255,1) 100%);
     position: relative;
+    border-radius: 5px;
 }
 
 .new-account-header {
     color: white;
     z-index: 10;
     font-family: 'Bangers', cursive;
-    /* transform: scale(1.5); */
     font-size: 50px;
     letter-spacing: 1px;
 }
@@ -148,11 +152,11 @@ button {
 }
 
 .new-account-form {
+    margin-bottom: 50px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 100px;
 }
 
 .new-user-approval-div {

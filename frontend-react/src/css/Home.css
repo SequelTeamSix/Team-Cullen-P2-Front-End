@@ -75,6 +75,8 @@ body {
     margin-bottom: 50px;
 }
 
+
+
 .menu-link {
     text-align: center;
     margin-top: 0;
@@ -94,9 +96,6 @@ body {
 
 .menu-link:hover {
     background-color: rgba(186, 18, 0, 1);
-}
-
-.menu-link:hover {
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     transform: scale(1.02);
 }
@@ -138,7 +137,7 @@ body {
 
 .rules-paragraph {
     text-align: left;
-    color: #3C3744;
+    color: white;
 }
 
 .close-btn {
@@ -148,10 +147,17 @@ body {
     top: 0;
     right: 0;
     margin: 25px;
+    z-index: 6;
 }
 
 .close-btn:hover {
     color: gray;
 }
 
+.new-deck-preview {
+    position: absolute;
+    background-color: white;
+    height: 80vh;
+    width: 80vw;
+}
 

@@ -12,12 +12,15 @@ export default function Home() {
     const { userId } = location.state;
     
     const [currentUser, setCurrentUser] = useState();
-    const [rulesDisplay, setRulesDisplay] = useState('none')
+    const [rulesDisplay, setRulesDisplay] = useState('none');
+    const [currentUsersCards, setCurrentUsersCards] = useState();
+    const [previewDisplay, setPreviewDisplay] = useState('block')
 
     useEffect(() => {
         console.log(userId)
         getUserById(userId);
-
+        getUsersCards(userId)
+    
         function getUserById(id){
             let url = 'http://localhost:8000/player/id/' + id;
             console.log(url)
@@ -28,7 +31,18 @@ export default function Home() {
               setCurrentUser(returnedUser);
             })
           }
-    }, [userId])
+
+    function getUsersCards(id){
+        let url = 'http://localhost:8000/ownedcards/player/' + id;
+        axios.get(url)
+        .then(response => {
+          let returnedUsersCards = response.data;
+          console.log(id)
+          console.log(returnedUsersCards)
+          setCurrentUsersCards(returnedUsersCards);
+        })
+      }
+}, [userId])
 
     function openRulesPopup(){
         setRulesDisplay('block')
@@ -38,8 +52,13 @@ export default function Home() {
         setRulesDisplay('none')
       }
 
+      function closePreviewPopup(){
+        setPreviewDisplay('none')
+      }
 
-return ( currentUser ? 
+    
+
+return ( currentUser && currentUsersCards ? 
     <div>
         <div className="main-page-bg">
         <div className="main-page-overlay"></div>
@@ -50,7 +69,7 @@ return ( currentUser ?
                     <p className="info current-points">Points: {currentUser.points}</p>
                     <p className="info current-wins">Wins: {currentUser.wins}</p>
                     <p className="info current-loses">Losses: {currentUser.loses}</p>
-                    <p className="info current-cards">Cards: </p>
+                    <p className="info current-cards">Cards: {currentUsersCards.length} of 80</p>
                 </div>
                 <h1 className="main-title">Superhero Card Duel</h1>
                 <div className="menu">
@@ -58,6 +77,26 @@ return ( currentUser ?
                     <Link className="menu-link" to="/store" state={{userId:currentUser.player_id}}>Visit Store</Link>
                     <Link className="menu-link" to="/deckbuilder" state={{userId:currentUser.player_id}}>My Deck Builder</Link>
                     <p className="menu-link" onClick={() => openRulesPopup()}>Read Rules</p>
+                </div>
+
+                <div className="new-deck-preview" style={{display: previewDisplay}}>
+                    <h2>Preview Your New Cards!</h2>
+                    <span className="close-btn" onClick={() => closePreviewPopup()}>X</span>
+                    <div>
+
+                        {console.log(currentUsersCards)}
+                    {
+                        currentUsersCards.map(arrayOfCards => (
+                            <div className="preview-card" key={arrayOfCards.card.set_id}>
+                                <p className="preview-card-title">{arrayOfCards.card.card_name}</p>
+                                <p className="preview-card-power">{arrayOfCards.card.power}</p>
+                                <img src={arrayOfCards.card.image_url} alt={arrayOfCards.card.card_name}></img>
+                            </div>
+                        ))
+                    }
+                    </div>
+                  
+                    
                 </div>
 
                 <div className="rules-outer-div" style={{display: rulesDisplay}}>

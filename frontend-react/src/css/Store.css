@@ -26,7 +26,8 @@
     justify-content: flex-start;
     align-items: center;
     max-width: 1200px;
-    background-color: white;
+    background: rgb(255,255,255);
+    background: linear-gradient(180deg, rgba(255,255,255,1) 2%, rgba(161,191,219,1) 100%, rgba(24,181,158,1) 100%, rgba(8,124,160,1) 100%, rgba(0,212,255,1) 100%);
     min-height: 800px;
     margin: auto;
     position: relative;
@@ -43,6 +44,11 @@
     margin: 25px;
     text-decoration: none;
     color: black;
+    transition: 2s ease;
+}
+
+.home-link:hover {
+    color: rgb(69, 69, 69);
 }
 
 .store-header {

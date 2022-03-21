@@ -9,6 +9,11 @@ p {
     padding: 0;
 }
 
+.test-p {
+    color: white;
+    cursor: pointer;
+}
+
 .main-game-div {
     position: relative;
     background: url('../images/home-bg.png');
@@ -196,15 +201,49 @@ p {
 }
 
 .rules-inner-div,
-.end-game-inner-div {
-    padding: 50px;
+.lose-game-inner-div,
+.win-game-inner-div {
+    
     margin: 0 auto;
     height: 80%;
-    width: 50%;
+    width: 40%;
     background-color: white;
     position: relative;
     display: flex;
     flex-direction: column;
+    border-radius: 5px;
+    background: rgb(90,143,191);
+    background: linear-gradient(360deg, rgba(90,143,191,1) 2%, rgba(161,191,219,1) 100%, rgba(24,181,158,1) 100%, rgba(8,124,160,1) 100%, rgba(0,212,255,1) 100%);
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+.win-game-inner-div {
+    background: url('../images/win-image.jpeg');
+    background-position: center;
+    background-size: cover;
+}
+
+.lose-game-inner-div {
+    background: rgb(90,143,191);
+    background-image: url('../images/lose-image.png');
+    background-position: center;
+    background-size: cover;
+    z-index: -1;
+}
+
+.end-screen-overlay {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(61, 82, 213, .6);
+}
+
+.end-screen-header {
+    color: white;
+    z-index: 10;
+    font-family: 'Bangers', cursive;
+    font-size: 5vw;
+    letter-spacing: 5px;
 }
 
 .end-screen-content {
@@ -213,27 +252,29 @@ p {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    z-index: 5;
 }
 
 .end-screen-btn {
-        margin-top: 0;
-        font-size: 24px;
-        color: black;
-        background-color: white;
-        text-decoration: none;
-        padding: 15px;
-        border-radius: 5px;
-        margin-bottom: 20px;
-        min-width: 250px;
-        outline: 0;
-        border: none;
-        transition: .5s ease;
-        cursor: pointer;
-        text-align: center;
-    }
+    text-align: center;
+    margin-top: 0;
+    font-size: 1.5vw;
+    color: white;
+    background-color: rgba(186, 18, 0, .77);
+    text-decoration: none;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    min-width: 250px;
+    outline: 0;
+    border: none;
+    transition: .5s ease;
+    cursor: pointer;
+}
     
+.end-screen-btn:hover {
+    background-color: rgba(186, 18, 0, 1);
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    transform: scale(1.02);
+}
     
-    .end-screen-btn:hover {
-        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-        transform: scale(1.02);
-    }

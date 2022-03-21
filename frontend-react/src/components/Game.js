@@ -37,7 +37,7 @@ function Game() {
                     <p>Rules</p>
                 </div>
                 <Link className="quit-btn" to="/home" state={{userId: userId}}>Quit</Link>
-                <p onClick={openEndPopup}>Test End Screen</p>
+                <p className="test-p"onClick={openEndPopup}>Test End Screen</p>
             </div>
 
             {/* Rules Popup */}
@@ -57,10 +57,20 @@ function Game() {
                 </div>
             </div>{/* End Game Popup */}
             <div className="end-game-outer-div" style={{display: endDisplay}}>
-                <div className="end-game-inner-div">
+                {/* <div className="win-game-inner-div">
+                <div className="end-screen-overlay"></div>
                     <span className="close-btn" onClick={closeEndPopup}>X</span>
                     <div className="end-screen-content">
-                        <h3>You Win or Lose</h3>
+                        <h3 className="end-screen-header">You Win!</h3>
+                        <p className="end-screen-btn">Play Again With Same Deck</p>
+                        <Link className="end-screen-btn" to="/home" state={{userId: userId}}>Quit</Link>
+                    </div>
+                </div> */}
+                <div className="lose-game-inner-div">
+                    <div className="end-screen-overlay"></div>
+                    <span className="close-btn" onClick={closeEndPopup}>X</span>
+                    <div className="end-screen-content win">
+                        <h3 className="end-screen-header">You Lose!</h3>
                         <p className="end-screen-btn">Play Again With Same Deck</p>
                         <Link className="end-screen-btn" to="/home" state={{userId: userId}}>Quit</Link>
                     </div>
