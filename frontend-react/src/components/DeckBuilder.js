@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
@@ -9,15 +9,20 @@ function DeckBuilder() {
     const { userId } = location.state;
     const [currentUsersCards, setCurrentUsersCards] = useState();
     const [gameplaySlotsArray, setGameplaySlotsArray] = useState();
+    const [availableSlots, setAvailableSlots] = useState(20);
+    const [nextInsertIndex, setNextInsertIndex] = useState(0)
 
     var gameplaySlots = [];
 
     for(let i = 0; i < 20; i++){
-        gameplaySlotsArray.push(<div className="gameplay-card-slot"key={i}><p>Choose a Card</p></div>)
+        gameplaySlots.push(<div className="gameplay-card-slot" key={i}><p>Choose a Card</p></div>)
     }
 
     useEffect(() => {
       getUsersCards(userId);      
+      setGameplaySlotsArray(gameplaySlots)
+      console.log(gameplaySlots)
+
 
       function getUsersCards(id){
         let url = 'http://localhost:8000/ownedcards/player/' + id;
@@ -31,9 +36,40 @@ function DeckBuilder() {
 
    
     function addCardToGameplayDeck(e){
-      let characterCard = e.target;
-      setGameplaySlotsArray(...setGameplaySlotsArray, characterCard)
-      console.log(gameplaySlots)
+      let power = e.target.getElementsByClassName('owned-card-power')[0].innerHTML;
+      let name = e.target.getElementsByClassName('owned-card-title')[0].innerHTML;
+      let imageUrl = e.target.lastElementChild.innerHTML;
+      let card = (
+        <Fragment>
+           <div className="deck-card" onClick={() => removeCard()} key={Math.random()} style={{backgroundImage: `url(${imageUrl})`}}>
+                <div className="deck-card-banner">
+                    <p className="deck-card-title">{name}</p>
+                </div>
+            <p className="deck-card-power">{power}</p>
+            </div>
+        </Fragment>
+      )
+    
+    if(availableSlots > 0){
+      gameplaySlotsArray[nextInsertIndex] = card;
+      setNextInsertIndex(nextInsertIndex + 1)
+      setAvailableSlots(availableSlots - 1)
+    } else {
+      alert("Sorry, your gameplay deck is full!")
+    }
+    }
+
+    function removeCard(){
+      let slot = (
+        <Fragment>
+          <div className="gameplay-card-slot"key={Math.random}><p>Choose a Card</p></div>
+        </Fragment>
+      )
+      console.log('clicked')
+      setNextInsertIndex(nextInsertIndex - 1)
+      gameplaySlotsArray[nextInsertIndex] = slot;
+      setAvailableSlots(availableSlots + 1)
+      setNextInsertIndex(nextInsertIndex)
     }
 
     return ( currentUsersCards ? 
@@ -57,11 +93,12 @@ function DeckBuilder() {
                <div className="all-cards">
                     {
                       currentUsersCards.map(card => (
-                        <div className="owned-card-slot" key={card.set_id} style={{backgroundImage: `url(${card.card.image_url})`}} onClick={(e)=> addCardToGameplayDeck(e)}>
+                        <div className="owned-card-slot" key={Math.random()} style={{backgroundImage: `url(${card.card.image_url})`}} onClick={(e)=> addCardToGameplayDeck(e)}>
                             <div className="owned-card-banner">
                               <p className="owned-card-title">{card.card.card_name}</p>
                             </div>
                             <p className="owned-card-power">{card.card.power}</p>
+                            <p className="hidden-image-url">{card.card.image_url}</p>
                         </div>
                         
                       ))

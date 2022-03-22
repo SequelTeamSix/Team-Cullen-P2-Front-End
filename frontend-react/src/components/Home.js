@@ -4,9 +4,12 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { Link, useLocation} from 'react-router-dom';
 import Leaderboard from "./Leaderboard";
+import gift from "../images/gift.png";
+
 
 
 export default function Home() {
+
 
     const location = useLocation();
     const { userId } = location.state;
@@ -14,11 +17,9 @@ export default function Home() {
     const [currentUser, setCurrentUser] = useState();
     const [rulesDisplay, setRulesDisplay] = useState('none');
     const [currentUsersCards, setCurrentUsersCards] = useState();
-    const [previewDisplay, setPreviewDisplay] = useState('flex');
+    const [previewDisplay, setPreviewDisplay] = useState('none');
+    const [giftDisplay, setGiftDisplay] = useState('block');
 
-    // if(currentUser.wins === 0 && currentUser.loses === 0){
-    //     setPreviewDisplay('flex')
-    // }
 
     useEffect(() => {
         getUserById(userId);
@@ -43,7 +44,13 @@ export default function Home() {
         }
         }, [userId])
 
- 
+
+        function triggerCardPreview(){
+            console.log('triggered')
+            setPreviewDisplay('flex')
+            setGiftDisplay('none')
+        }
+        
       function openRulesPopup(){
         setRulesDisplay('block')
       }
@@ -59,11 +66,7 @@ export default function Home() {
    
 
 return ( currentUser && currentUsersCards ? 
-    
     <div>
-        {
-            currentUser.wins === 0 && currentUser.loses === 0 ? console.log('No wins or loses') : console.log('User has been here before')
-        }
         <div className="main-page-bg">
         <div className="main-page-overlay"></div>
             <div className="home-container">
@@ -74,6 +77,12 @@ return ( currentUser && currentUsersCards ?
                     <p className="info current-wins">Wins: {currentUser.wins}</p>
                     <p className="info current-loses">Losses: {currentUser.loses}</p>
                     <p className="info current-cards">Cards: {currentUsersCards.length} of 80</p>
+                    {currentUser.wins === 0 && currentUser.loses === 0 ? 
+                    <div className="gift-div" onClick={() => triggerCardPreview()} style={{display: giftDisplay}}>
+                        <img className="gift" src={gift} alt="gift box"></img>
+                    </div> : ''
+                    }
+                    
                 </div>
                 <h1 className="main-title">Superhero Card Duel</h1>
                 <div className="menu">

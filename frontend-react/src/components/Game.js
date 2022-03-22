@@ -1,4 +1,4 @@
-import React, { useEffect, Template, Fragment } from "react";
+import React, { useEffect, Fragment } from "react";
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import '../css/Game.css';
@@ -86,8 +86,8 @@ function Game() {
         let computerPower = allCardsForComputer[randomIndex].power;
         let playerPower = e.target.getElementsByClassName('play-card-power')[0].innerHTML;
         let characterName = e.target.getElementsByClassName('play-card-title')[0].innerHTML;
-        // let key = e.target.dataset.key;
-        // let clickedCardIndex = fiveDisplayedCards.findIndex(({card_name}) => card_name === characterName)
+        let imageUrl = e.target.lastElementChild.innerHTML;
+       
         console.log(e.target)
         fiveDisplayedCards.map(card => (
             console.log(card)
@@ -95,11 +95,11 @@ function Game() {
 
         let playerCard = (
             <Fragment>
-               <div className="card-in-play" key={Math.random()} style={{backgroundImage: `url(${e.target.lastElementChild.innerHTML})`}}>
+               <div className="card-in-play" key={Math.random()} style={{backgroundImage: `url(${imageUrl})`}}>
                     <div className="play-card-banner">
-                        <p className="play-card-title">{e.target.firstElementChild.firstElementChild.innerHTML}</p>
+                        <p className="play-card-title">{characterName}</p>
                     </div>
-                <p className="play-card-power">{e.target.getElementsByClassName('play-card-power')[0].innerHTML}</p>
+                <p className="play-card-power">{playerPower}</p>
                 </div>
             </Fragment>
           )

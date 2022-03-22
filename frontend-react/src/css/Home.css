@@ -46,11 +46,26 @@ body {
 
 .current-user-name {
    color: rgba(61, 82, 213, 1);
-  
 }
 
 .info {
     margin-bottom: 5px;
+}
+
+.gift-div {
+    position: relative;
+}
+
+.gift {
+    width: 100px;
+    position: absolute;
+    animation: giftShake 1s infinite; 
+    cursor: pointer;
+}
+
+@keyframes giftShake {
+    from {transform: scale(1) rotate(-2deg);}
+    to {transform: scale(1.2) rotate(2deg);}
 }
 
 .home-container {

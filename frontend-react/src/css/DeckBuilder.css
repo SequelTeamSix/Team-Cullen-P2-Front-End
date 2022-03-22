@@ -63,7 +63,8 @@
 }
 
 .gameplay-card-slot,
-.owned-card-slot {
+.owned-card-slot,
+.deck-card {
     height: 15vw;
     width: 10vw;
     margin: 10px;
@@ -82,7 +83,10 @@
     transform: scale(1.01);
 }
 
-.owned-card-banner{
+
+
+.owned-card-banner,
+.deck-card-banner {
     padding: 10px 0;
     position: absolute;
     display: flex;
@@ -93,7 +97,8 @@
     width: 100%;
 }
 
-.owned-card-title {
+.owned-card-title,
+.deck-card-title {
     color: white;
     z-index: 10;
     font-family: 'Bangers', cursive;
@@ -101,7 +106,8 @@
     letter-spacing: 1px;
 }
 
-.owned-card-power {
+.owned-card-power,
+.deck-card-power {
     background: linear-gradient(180deg, rgb(227, 221, 45) 2%, rgb(208, 193, 25) 100%);
     font-size: 1.2vw;
     height: 30px;
