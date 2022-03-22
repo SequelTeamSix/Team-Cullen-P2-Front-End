@@ -11,10 +11,10 @@ function Game() {
     const location = useLocation();
     const { userId } = location.state;
 
+    const [currentUser, setCurrentUser] = useState();
     const [rulesDisplay, setRulesDisplay] = useState('none');
     const [winDisplay, setWinDisplay] = useState('none');
     const [loseDisplay, setLoseDisplay] = useState('none');
-
    
     const [fiveDisplayedCards, setFiveDisplayedCards] = useState([]);
     const [playerCardInPlay, setPlayerCardInPlay] = useState([]);
@@ -29,6 +29,13 @@ function Game() {
     let fiveCards =[];
    
     useEffect(() => {
+        let currentUserUrl = 'http://localhost:8000/player/id/' + userId;
+        axios.get(currentUserUrl)
+        .then(response => { 
+          let userObj = response.data;
+          setCurrentUser(userObj)
+        })
+
         let playerDeckUrl = 'http://localhost:8000/deck/player/' + userId;
         axios.get(playerDeckUrl)
         .then(response => { 
@@ -121,7 +128,7 @@ function Game() {
             document.getElementById('player-card-in-play').classList.add('winning-card')
             setPlayerScore(playerScore + 1)
         } else {
-            //They're equal
+            //They're equal, power tie animation?
         }
         setTimeout(function(){
             document.getElementById('computer-card-in-play').classList.remove('winning-card')
@@ -131,14 +138,27 @@ function Game() {
     }
 
     function checkForWin(){
+        //Add Win To Database
         if(playerScore >= 9){
             setWinDisplay('flex')
-            //Add Win To Database
-            //Add Points To Database
+            currentUser.wins += 1;
+            currentUser.points += 15;
+            axios.put('http://localhost:8000/player/update/' + userId, currentUser)
+            .then(response => {
+                let updatedResponseObj = response.data;
+                console.log(updatedResponseObj)
+                setCurrentUser(updatedResponseObj)
+              })
+            //Add Loss To Database
         } else if (computerScore >= 9) {
             setLoseDisplay('flex')
-            //Add Loss to Database
-            //Add pity points to Database
+             currentUser.loses += 1;
+             currentUser.points += 5;
+             axios.put('http://localhost:8000/player/update/' + userId, currentUser)
+             .then(response => {
+               let updatedResponseObj = response.data;
+               setCurrentUser(updatedResponseObj)
+             })
         } else {
             return
         }
@@ -166,9 +186,8 @@ function Game() {
         setRulesDisplay('none')
       }
 
-return ( fiveDisplayedCards ? 
+return ( fiveDisplayedCards && currentUser ? 
       <div>
-          {console.log(fiveDisplayedCards)}
           <div className="main-game-div">
               <div className="main-overlay"></div>
             <div className="toggle-container">

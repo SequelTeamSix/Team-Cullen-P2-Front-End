@@ -61,6 +61,9 @@ export default function Home() {
 return ( currentUser && currentUsersCards ? 
     
     <div>
+        {
+            currentUser.wins === 0 && currentUser.loses === 0 ? console.log('No wins or loses') : console.log('User has been here before')
+        }
         <div className="main-page-bg">
         <div className="main-page-overlay"></div>
             <div className="home-container">
