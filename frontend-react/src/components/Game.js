@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import '../css/Game.css';
 import axios from 'axios';
+import _ from 'lodash';
+
 
 function Game() {
 
@@ -72,9 +74,17 @@ function Game() {
     }
 
     function playCard(e){   
+        console.log(fiveCards)
         let randomIndex = Math.floor(Math.random() * 80)
         let computerPower = allCardsForComputer[randomIndex].power;
         let playerPower = e.target.getElementsByClassName('play-card-power')[0].innerHTML;
+        let characterName = e.target.getElementsByClassName('play-card-title')[0].innerHTML;
+        // let key = e.target.dataset.key;
+        // let clickedCardIndex = fiveDisplayedCards.findIndex(({card_name}) => card_name === characterName)
+        console.log(e.target)
+        fiveDisplayedCards.map(card => (
+            console.log(card)
+        ));
 
         let playerCard = (
             <Fragment>
@@ -100,6 +110,7 @@ function Game() {
           )
         setComputerCardInPlay(computerCard)
         compareCards(computerPower, playerPower);
+        // removeCardFrom5(key)
     }
 
     function compareCards(computerPower, playerPower){
@@ -122,11 +133,23 @@ function Game() {
     function checkForWin(){
         if(playerScore >= 9){
             setWinDisplay('flex')
+            //Add Win To Database
+            //Add Points To Database
         } else if (computerScore >= 9) {
             setLoseDisplay('flex')
+            //Add Loss to Database
+            //Add pity points to Database
         } else {
             return
         }
+    }
+
+    function removeCardFrom5(index){
+        fiveCards.splice(index, 1)
+        console.log(fiveCards)
+
+        //Add another card from Player Deck
+        // setFiveDisplayedCards(fiveCards)
     }
 
     function startNewGame(){
@@ -145,6 +168,7 @@ function Game() {
 
 return ( fiveDisplayedCards ? 
       <div>
+          {console.log(fiveDisplayedCards)}
           <div className="main-game-div">
               <div className="main-overlay"></div>
             <div className="toggle-container">
@@ -204,7 +228,13 @@ return ( fiveDisplayedCards ?
                 <div className="player-field">
                     <div className="five-cards-div">
                         {fiveDisplayedCards.map(card => (
-                            <div className="card" onClick={(e)=>playCard(e)} key={Math.random()} style={{backgroundImage: `url(${card.card.image_url})`}}>
+                            <div 
+                            className="card" 
+                            onClick={(e)=>playCard(e)} 
+                            key={Math.random()} 
+                            style={{backgroundImage: `url(${card.card.image_url})`}}
+                            data-key={Math.random()}
+                            >
                                 <div className="play-card-banner">
                                  <p className="play-card-title">{card.card.card_name}</p>
                                 </div>

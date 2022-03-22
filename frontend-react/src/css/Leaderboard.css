@@ -1,9 +1,10 @@
 .leaderboard-div {
-    width: 100%;
+    width: 60%; 
     min-height: 200px;
     background: rgb(255,255,255);
     background: linear-gradient(180deg, rgba(255,255,255,1) 2%, rgba(161,191,219,1) 100%, rgba(24,181,158,1) 100%, rgba(8,124,160,1) 100%, rgba(0,212,255,1) 100%);
     padding: 20px;
+    padding-right: 30px;
     margin: 0 20px;
     margin-bottom: 50px;
     border-radius: 5px;
@@ -12,11 +13,40 @@
 
 .leaderboard-header {
     font-size: 28px;
-    margin: 5px 10px;
-    color: #3C3744;
+    margin: 0px 0px 20px 0px;
+    color: rgba(9, 12, 155, 1);
+    text-align: center;
+}
+
+.leaderboard-headings {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 30px;
+}
+
+.leaderboard-headings {
+    font-size: 18px;
+}
+
+.leaderboard-li {
+    padding: 5px 20px 5px 0;
 }
 
 .leaderboard-name {
-    margin-left: 12px;
-    margin-bottom: 10px;
+    margin: 0;
+    padding-left: 10px;
+}
+
+ol>li:nth-child(odd){
+    background-color: rgba(8,124,160,.3)
+}
+
+.leaderboard-li-div {
+    display: flex;
+    justify-content: space-between;
+}
+
+.leaderboard-name {
+  
+   
 }

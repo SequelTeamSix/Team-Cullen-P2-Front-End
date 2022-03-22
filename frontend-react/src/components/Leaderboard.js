@@ -27,10 +27,27 @@ export default function Leaderboard(){
         <div className="leaderboard-div">
             <h3 className="leaderboard-header">Leaderboard</h3>
             <div className="leaderboard-users">
+                    <div className="leaderboard-headings">
+                        <p className="leaderboard-heading">USERNAME</p>
+                        <p className="leaderboard-heading">WINS</p>
+                        <p className="leaderboard-heading">LOSSES</p>
+                    </div>
                     <ol>
                         {
                         leaderboardUsers.map(user => (
-                        <li className="leaderboard-name" key={user.player_id}>{user.username}</li>
+                                 <li className="leaderboard-li" key={user.player_id}>
+                                     <div className="leaderboard-li-div">
+                                        <div>
+                                            <p className="leaderboard-name">{user.username}</p>
+                                        </div>
+                                        <div>
+                                            <p>{user.wins}</p>
+                                        </div>
+                                        <div>
+                                            <p>{user.loses}</p>
+                                        </div>
+                                     </div> 
+                                 </li>
                     ))
                             }
                     </ol>
