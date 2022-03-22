@@ -10,7 +10,9 @@ function Game() {
     const { userId } = location.state;
 
     const [rulesDisplay, setRulesDisplay] = useState('none');
-    const [endDisplay, setEndDisplay] = useState('none');
+    const [winDisplay, setWinDisplay] = useState('none');
+    const [loseDisplay, setLoseDisplay] = useState('none');
+
    
     const [fiveDisplayedCards, setFiveDisplayedCards] = useState([]);
     const [playerCardInPlay, setPlayerCardInPlay] = useState([]);
@@ -29,7 +31,6 @@ function Game() {
         axios.get(playerDeckUrl)
         .then(response => { 
           let playerDeck = response.data;
-          console.log(playerDeck)
           randomizeDeck(playerDeck)
         })
 
@@ -48,7 +49,6 @@ function Game() {
     useEffect(() => {
         const timer = setTimeout(() => {
           drawCard(5)
-          console.log(allCardsForComputer)
         }, 1500);
         return () => clearTimeout(timer);
       }, []);
@@ -103,12 +103,12 @@ function Game() {
     }
 
     function compareCards(computerPower, playerPower){
-        console.log("computer power: " + computerPower)
-        console.log("player power: " + playerPower)
         if(computerPower > playerPower){
-            document.getElementById('computer-card-in-play').classList.add('winning-card')
+            document.getElementById('computer-card-in-play').classList.add('winning-card');
+            setComputerScore(computerScore + 1)
         } else if (playerPower > computerPower){
             document.getElementById('player-card-in-play').classList.add('winning-card')
+            setPlayerScore(playerScore + 1)
         } else {
             //They're equal
         }
@@ -116,6 +116,23 @@ function Game() {
             document.getElementById('computer-card-in-play').classList.remove('winning-card')
             document.getElementById('player-card-in-play').classList.remove('winning-card')
         }, 1000);
+        checkForWin()
+    }
+
+    function checkForWin(){
+        if(playerScore >= 9){
+            setWinDisplay('flex')
+        } else if (computerScore >= 9) {
+            setLoseDisplay('flex')
+        } else {
+            return
+        }
+    }
+
+    function startNewGame(){
+        setWinDisplay('none')
+        setLoseDisplay('none')
+        console.log("New Game Started")
     }
       
     function openRulesPopup(){
@@ -126,17 +143,8 @@ function Game() {
         setRulesDisplay('none')
       }
 
-      function openEndPopup(){
-        setEndDisplay('block')
-      }
-
-      function closeEndPopup(){
-        setEndDisplay('none')
-      }
-    
 return ( fiveDisplayedCards ? 
       <div>
-          {console.log(fiveDisplayedCards)}
           <div className="main-game-div">
               <div className="main-overlay"></div>
             <div className="toggle-container">
@@ -144,7 +152,6 @@ return ( fiveDisplayedCards ?
                     <p>Rules</p>
                 </div>
                 <Link className="quit-btn" to="/home" state={{userId: userId}}>Quit</Link>
-                <p className="test-p"onClick={openEndPopup}>Test End Screen</p>
             </div>
 
             {/* Rules Popup */}
@@ -161,29 +168,8 @@ return ( fiveDisplayedCards ?
                     First player to get a score of 10 wins. 
                     </p>
                 </div>
-            </div>{/* End Game Popup */}
-            <div className="end-game-outer-div" style={{display: endDisplay}}>
-                <div className="win-game-inner-div">
-                <div className="end-screen-overlay"></div>
-                    <span className="close-btn" onClick={closeEndPopup}>X</span>
-                    <div className="end-screen-content">
-                        <h3 className="end-screen-header">You Win!</h3>
-                        <p className="end-screen-btn">Play Again With Same Deck</p>
-                        <Link className="end-screen-btn" to="/home" state={{userId: userId}}>Quit</Link>
-                    </div>
-                </div>
-
-                <div className="lose-game-inner-div">
-                    <div className="end-screen-overlay"></div>
-                    <span className="close-btn" onClick={closeEndPopup}>X</span>
-                    <div className="end-screen-content win">
-                        <h3 className="end-screen-header">You Lose!</h3>
-                        <p className="end-screen-btn">Play Again With Same Deck</p>
-                        <Link className="end-screen-btn" to="/home" state={{userId: userId}}>Quit</Link>
-                    </div>
-                </div>
             </div>
-        
+           
             <div className="game-container">
                 <div className="computer-field">
                     <div className="five-cards-div">
@@ -233,9 +219,29 @@ return ( fiveDisplayedCards ?
                         </div>
                     </div>
                 </div>
+            </div>
 
+             {/* End Game Popup */}
+             <div className="end-game-outer-div" style={{display: winDisplay}}>
+                <div className="win-game-inner-div">
+                <div className="end-screen-overlay"></div>
+                    <div className="end-screen-content">
+                        <h3 className="end-screen-header">You Win!</h3>
+                        <p className="end-screen-btn" onClick={()=>startNewGame()}>Play Again With Same Deck</p>
+                        <Link className="end-screen-btn" to="/home" state={{userId: userId}}>Quit</Link>
+                    </div>
+                </div>
+            </div>
 
-
+            <div className="end-game-outer-div" style={{display: loseDisplay}}>
+                <div className="lose-game-inner-div" >
+                    <div className="end-screen-overlay"></div>
+                    <div className="end-screen-content win">
+                        <h3 className="end-screen-header">You Lose!</h3>
+                        <p className="end-screen-btn" onClick={()=>startNewGame()}>Play Again With Same Deck</p>
+                        <Link className="end-screen-btn" to="/home" state={{userId: userId}}>Quit</Link>
+                    </div>
+                </div>
             </div>
 
           </div>
