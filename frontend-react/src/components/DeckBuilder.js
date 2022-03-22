@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 import '../css/DeckBuilder.css';
-import GameplayCardsList from "./GameplayCardsList";
 
 function DeckBuilder() {
     const location = useLocation();
