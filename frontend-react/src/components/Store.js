@@ -87,7 +87,7 @@ export default function Store() {
             }
         }
 
-        function get4CommonCards(){
+       async function get4CommonCards(){
               for(let i = 0; i < 4; i++){
                 let randomIndex = Math.floor(Math.random() * allCommonCards.length);
                 fourChosenCards.push(allCommonCards[randomIndex]);
@@ -108,12 +108,12 @@ export default function Store() {
                             "loses": storeUser.loses
                         }
                 }
-              axios.put('http://localhost:8000/ownedcards/update', newOwnedCard)
+             await axios.put('http://localhost:8000/ownedcards/update', newOwnedCard)
               console.log(newOwnedCard)
           } 
         }
 
-        function get4RareCards(){
+        async function get4RareCards(){
             for(let i = 0; i < 4; i++){
               let randomIndex = Math.floor(Math.random() * allRareCards.length);
               fourChosenCards.push(allRareCards[randomIndex]);
@@ -134,12 +134,12 @@ export default function Store() {
                           "loses": storeUser.loses
                       }
               }
-            axios.put('http://localhost:8000/ownedcards/update', newOwnedCard)
+            await axios.put('http://localhost:8000/ownedcards/update', newOwnedCard)
             console.log(newOwnedCard)
         } 
       }
 
-      function get4UltraRareCards(){
+     async function get4UltraRareCards(){
         for(let i = 0; i < 4; i++){
           let randomIndex = Math.floor(Math.random() * allUltraRareCards.length);
           fourChosenCards.push(allUltraRareCards[randomIndex]);
@@ -160,7 +160,7 @@ export default function Store() {
                       "loses": storeUser.loses
                   }
           }
-        axios.put('http://localhost:8000/ownedcards/update', newOwnedCard)
+       await axios.put('http://localhost:8000/ownedcards/update', newOwnedCard)
         console.log(newOwnedCard)
     } 
   }
