@@ -15,8 +15,12 @@ function Game() {
     const [fiveDisplayedCards, setFiveDisplayedCards] = useState([]);
     const [playerCardInPlay, setPlayerCardInPlay] = useState([]);
     const [ComputerCardInPlay, setComputerCardInPlay] = useState([]);
+    const [allCardsForComputer, setAllCardsForComputer] = useState([])
+    const [computerScore, setComputerScore] = useState(0);
+    const [playerScore, setPlayerScore] = useState(0);
 
-    let allCardsForComputer = [];
+
+    let allPossibleCards = []
     let playersRandomizedDeck = [];
     let fiveCards =[];
    
@@ -25,6 +29,7 @@ function Game() {
         axios.get(playerDeckUrl)
         .then(response => { 
           let playerDeck = response.data;
+          console.log(playerDeck)
           randomizeDeck(playerDeck)
         })
 
@@ -33,9 +38,9 @@ function Game() {
         .then(response => { 
           let allCards = response.data;
           allCards.map(card => (
-            allCardsForComputer.push(card)
+            allPossibleCards.push(card)
           )) 
-          
+          setAllCardsForComputer(allPossibleCards)
         })
 
     }, [])
@@ -49,6 +54,7 @@ function Game() {
       }, []);
 
 
+      //This doesn't ensure all the user's cards will be used!
     function randomizeDeck(cards){
         for(let i = 0; i < cards.length; i++){
             let randomIndex = Math.floor(Math.random() * cards.length);
@@ -65,8 +71,11 @@ function Game() {
         setFiveDisplayedCards(fiveCards)
     }
 
-    function playCard(e){
-        console.log(e.target)
+    function playCard(e){   
+        let randomIndex = Math.floor(Math.random() * 80)
+        let computerPower = allCardsForComputer[randomIndex].power;
+        let playerPower = e.target.getElementsByClassName('play-card-power')[0].innerHTML;
+
         let playerCard = (
             <Fragment>
                <div className="card-in-play" key={Math.random()} style={{backgroundImage: `url(${e.target.lastElementChild.innerHTML})`}}>
@@ -79,18 +88,34 @@ function Game() {
           )
         setPlayerCardInPlay(playerCard)
 
-        let randomIndex = Math.floor(Math.random() * allCardsForComputer.length)
         let computerCard = (
             <Fragment>
-               <div className="card-in-play" key={Math.random()} style={{backgroundImage: `url(${allCardsForComputer[randomIndex]})`}}>
+               <div className="card-in-play" key={Math.random()} style={{backgroundImage: `url(${allCardsForComputer[randomIndex].image_url})`}}>
                     <div className="play-card-banner">
-                        <p className="play-card-title">{e.target.firstElementChild.firstElementChild.innerHTML}</p>
+                        <p className="play-card-title">{allCardsForComputer[randomIndex].card_name}</p>
                     </div>
-                <p className="play-card-power">{e.target.getElementsByClassName('play-card-power')[0].innerHTML}</p>
+                <p className="play-card-power">{allCardsForComputer[randomIndex].power}</p>
                 </div>
             </Fragment>
           )
         setComputerCardInPlay(computerCard)
+        compareCards(computerPower, playerPower);
+    }
+
+    function compareCards(computerPower, playerPower){
+        console.log("computer power: " + computerPower)
+        console.log("player power: " + playerPower)
+        if(computerPower > playerPower){
+            document.getElementById('computer-card-in-play').classList.add('winning-card')
+        } else if (playerPower > computerPower){
+            document.getElementById('player-card-in-play').classList.add('winning-card')
+        } else {
+            //They're equal
+        }
+        setTimeout(function(){
+            document.getElementById('computer-card-in-play').classList.remove('winning-card')
+            document.getElementById('player-card-in-play').classList.remove('winning-card')
+        }, 1000);
     }
       
     function openRulesPopup(){
@@ -109,8 +134,9 @@ function Game() {
         setEndDisplay('none')
       }
     
-return ( fiveDisplayedCards && fiveCards ? 
+return ( fiveDisplayedCards ? 
       <div>
+          {console.log(fiveDisplayedCards)}
           <div className="main-game-div">
               <div className="main-overlay"></div>
             <div className="toggle-container">
@@ -177,15 +203,15 @@ return ( fiveDisplayedCards && fiveCards ?
                 </div>
 
                 <div className="dueling-field">
-                    <div className="computer-card-in-play">
+                    <div id="computer-card-in-play" className="computer-card-in-play">
                         {ComputerCardInPlay}
                     </div>
-                    <div className="player-card-in-play">
+                    <div id="player-card-in-play" className="player-card-in-play">
                         {playerCardInPlay}
                     </div>
                     <div className="scoring-container">
-                        <p className="computer-score">Computer: 3</p>
-                        <p className="player-score">Player: 5</p>
+                        <p className="computer-score">Computer: {computerScore}</p>
+                        <p className="player-score">Player: {playerScore}</p>
                     </div>
                 </div>
 

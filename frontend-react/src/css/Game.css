@@ -157,7 +157,8 @@ p {
 }
 
 .card-in-play,
-.computer-card-in-play {
+#computer-card-in-play,
+#player-card-in-play {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -172,7 +173,7 @@ p {
     background-size: cover;
     position: relative;
     cursor: pointer;
-    transition: .2s ease;
+    transition: .2s ease-in-out;
     border-radius: 2px;
 }
 
@@ -351,4 +352,13 @@ p {
 
 .hidden-image-url {
     display: none;
+}
+
+.winning-card {
+    animation: winningCard 1s; 
+}
+
+@keyframes winningCard {
+    from {transform: scale(1) rotate(0deg);}
+    to {transform: scale(1.2) rotate(2deg);}
 }
