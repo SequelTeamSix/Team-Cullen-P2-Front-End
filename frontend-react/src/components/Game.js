@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment } from "react";
+import React, { useEffect, Fragment, useCallback } from "react";
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import '../css/Game.css';
@@ -22,57 +22,80 @@ function Game() {
     const [allCardsForComputer, setAllCardsForComputer] = useState([])
     const [computerScore, setComputerScore] = useState(0);
     const [playerScore, setPlayerScore] = useState(0);
-    // const [randomizedDeck, setRandomizedDeck] = useState();
+    const [randomizedDeck, setRandomizedDeck] = useState([]);
 
     let allPossibleCards = []
     let playersRandomizedDeck = [];
     let fiveCards =[];
    
     useEffect(() => {
-        let currentUserUrl = 'http://localhost:8000/player/id/' + userId;
-        axios.get(currentUserUrl)
-        .then(response => { 
-          let userObj = response.data;
-          setCurrentUser(userObj)
-        })
+        fetchData()
 
-        let playerDeckUrl = 'http://localhost:8000/deck/player/' + userId;
-        axios.get(playerDeckUrl)
-        .then(response => { 
-          let playerDeck = response.data;
-          randomizeDeck(playerDeck)
-        })
-
-        let computerDeckUrl = 'http://localhost:8000/card';
-        axios.get(computerDeckUrl)
-        .then(response => { 
-          let allCards = response.data;
-          allCards.map(card => (
-            allPossibleCards.push(card)
-          )) 
-          setAllCardsForComputer(allPossibleCards)
-        })  
+        async function fetchData(){
+            let currentUserUrl = 'http://localhost:8000/player/id/' + userId;
+            await axios.get(currentUserUrl)
+            .then(response => { 
+              let userObj = response.data;
+              setCurrentUser(userObj)
+            })
+    
+            let playerDeckUrl = 'http://localhost:8000/deck/player/' + userId;
+            await axios.get(playerDeckUrl)
+            .then(response => { 
+              let playerDeck = response.data;
+              randomizeDeck(playerDeck)
+            })
+    
+            let computerDeckUrl = 'http://localhost:8000/card';
+            await axios.get(computerDeckUrl)
+            .then(response => { 
+              let allCards = response.data;
+              allCards.map(card => (
+                allPossibleCards.push(card)
+              )) 
+              setAllCardsForComputer(allPossibleCards)
+            }) 
+        }
+        
     }, [])
 
     useEffect(() => {
         const timer = setTimeout(() => {
-          drawCard(5)
+          drawCardInitialCards(5)
         }, 1500);
         return () => clearTimeout(timer);
       }, []);
+    
+        
 
         function randomizeDeck(cards) {
-            playersRandomizedDeck = cards.sort(() => Math.random() - 0.5)
+            let randomizedArray = cards.sort(() => Math.random() - 0.5)
+            for(let i = 0; i < randomizedArray.length; i++){
+                setRandomizedDeck((randomizedDeck) => { return [randomizedArray[i], ...randomizedDeck];})
+             }
             }
       
-
-      function drawCard(amount){
-        for(let i = 0; i < amount; i++){
-          let newCard = playersRandomizedDeck.pop();
-          fiveCards.push(newCard)
+            function drawCardInitialCards(amount){
+                setRandomizedDeck((randomizedDeck) => {
+                    let deckArray = [...randomizedDeck];
+                    for(let i = 0; i < amount; i++){
+                        fiveCards[i] = deckArray[i]
+                        deckArray.splice(deckArray[i], 1);
+                    }
+                    setRandomizedDeck(deckArray)
+                    setFiveDisplayedCards(fiveCards)
+            })
         }
-        console.log(playersRandomizedDeck)
-        setFiveDisplayedCards(fiveCards)
+
+        function drawCard(indexToReplace){
+                let deckArray = randomizedDeck;
+                console.log(deckArray)
+                let fiveCards = fiveDisplayedCards;
+                fiveCards[indexToReplace] = deckArray[deckArray.length - 1]
+                console.log(deckArray[deckArray.length - 1])
+                deckArray.splice(deckArray.length - 1, 1);
+                setRandomizedDeck(deckArray)
+                setFiveDisplayedCards(fiveCards)
     }
 
     function playCard(e){   
@@ -82,7 +105,6 @@ function Game() {
         let characterName = e.target.getElementsByClassName('play-card-title')[0].innerHTML;
         let imageUrl = e.target.lastElementChild.innerHTML;
         let uniqueId = e.target.getAttribute("data-key")
-        console.log(playersRandomizedDeck)
       
         let playerCard = (
             <Fragment>
@@ -108,7 +130,10 @@ function Game() {
           )
         setComputerCardInPlay(computerCard)
         compareCards(computerPower, playerPower);
-        // removeCardFrom5(uniqueId)
+
+        if(playerScore <= 9 || computerScore <= 9){
+            removeCardFrom5(uniqueId)
+        }
     }
 
     function compareCards(computerPower, playerPower){
@@ -137,7 +162,7 @@ function Game() {
             axios.put('http://localhost:8000/player/update/' + userId, currentUser)
             .then(response => {
                 let updatedResponseObj = response.data;
-                console.log(updatedResponseObj)
+               
                 setCurrentUser(updatedResponseObj)
               })
             //Add Loss To Database
@@ -156,60 +181,51 @@ function Game() {
     }
 
     function removeCardFrom5(id){
+    
      let indexToRemove;
      let fiveCards = Array.from(document.getElementsByClassName('card'));
-        console.log(fiveCards)
         fiveCards.map(card => {
-            
             let attribute = card.getAttribute('data-key');
-            console.log(attribute)
-            console.log('id: ' + id)
+            
             if(attribute == id){
                 let cardWeNeed;
                 let dataId = card.getAttribute('data-id')
+                
 
               for(let i = 0; i < allCardsForComputer.length; i++){
                   if(allCardsForComputer[i].card_id == dataId){
                       cardWeNeed = allCardsForComputer[i]
+                      
                   }
               }
-                console.log(cardWeNeed)
-
                 for(let j = 0; j < fiveDisplayedCards.length; j++){
-                    console.log(fiveDisplayedCards[j].card)
                     if(JSON.stringify(fiveDisplayedCards[j].card) === JSON.stringify(cardWeNeed)){
                         indexToRemove = j
-                        console.log(indexToRemove)
                     }
                 }
             }
-            console.log(playersRandomizedDeck)
-            let poppedCard = playersRandomizedDeck.pop()
-            console.log(poppedCard)
 
-            let poppedCardFragment = (
-                <Fragment>
-                      <div 
-                            className="card" 
-                            onClick={(e)=>playCard(e)} 
-                            key={Math.random()} 
-                            style={{backgroundImage: `url(${poppedCard.image_url})`}}
-                            data-key={Math.random()}
-                            data-id={poppedCard.card_id}
-                            >
-                                <div className="play-card-banner">
-                                 <p className="play-card-title">{poppedCard.card_name}</p>
-                                </div>
-                            <p className="play-card-power">{poppedCard.power}</p>
-                            <p className="hidden-image-url">{poppedCard.image_url}</p>
-                            </div>
-                </Fragment>
-              )
-            fiveDisplayedCards[indexToRemove] = poppedCardFragment;
+            // let poppedCardFragment = (
+            //     <Fragment>
+            //           <div 
+            //                 className="card" 
+            //                 onClick={(e)=>playCard(e)} 
+            //                 key={Math.random()} 
+            //                 style={{backgroundImage: `url(${poppedCard.image_url})`}}
+            //                 data-key={Math.random()}
+            //                 data-id={poppedCard.card_id}
+            //                 >
+            //                     <div className="play-card-banner">
+            //                      <p className="play-card-title">{poppedCard.card_name}</p>
+            //                     </div>
+            //                 <p className="play-card-power">{poppedCard.power}</p>
+            //                 <p className="hidden-image-url">{poppedCard.image_url}</p>
+            //                 </div>
+            //     </Fragment>
+            //   )
+            // fiveDisplayedCards[indexToRemove] = poppedCardFragment;
         })
-
-        //Add another card from Player Deck
-        // setFiveDisplayedCards(fiveCards)
+        drawCard(indexToRemove)
     }
 
     function startNewGame(){
@@ -289,7 +305,6 @@ return ( fiveDisplayedCards && currentUser ?
                         {fiveDisplayedCards.map(card => (
                             <div 
                             className="card" 
-                            
                             onClick={(e)=>playCard(e)} 
                             key={Math.random()} 
                             style={{backgroundImage: `url(${card.card.image_url})`}}
@@ -337,7 +352,7 @@ return ( fiveDisplayedCards && currentUser ?
 
           </div>
     </div> : <div> Loading...</div>
-      )}
+)}
   
   export default Game;
   

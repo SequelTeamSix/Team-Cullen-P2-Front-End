@@ -90,13 +90,14 @@ export default function Store() {
        async function get4CommonCards(){
               for(let i = 0; i < 4; i++){
                 let randomIndex = Math.floor(Math.random() * allCommonCards.length);
-                fourChosenCards.push(allCommonCards[randomIndex]);
+                setFourChosenCards(...fourChosenCards, fourChosenCards.push(allCommonCards[randomIndex]))
+                // fourChosenCards.push(allCommonCards[randomIndex]);
                 const newOwnedCard = {
                         "card": {
                             "card_id": allCommonCards[randomIndex].card_id,
                             "card_name": allCommonCards[randomIndex].card_name,
                             "power": allCommonCards[randomIndex].power,
-                            "image_url": "n/a",
+                            "image_url": allCommonCards[randomIndex].image_url,
                             "rarity": allCommonCards[randomIndex].rarity
                         },
                         "player": {
@@ -122,7 +123,7 @@ export default function Store() {
                           "card_id": allRareCards[randomIndex].card_id,
                           "card_name": allRareCards[randomIndex].card_name,
                           "power": allRareCards[randomIndex].power,
-                          "image_url": "n/a",
+                          "image_url": allCommonCards[randomIndex].image_url,
                           "rarity": allRareCards[randomIndex].rarity
                       },
                       "player": {
@@ -148,7 +149,7 @@ export default function Store() {
                       "card_id": allUltraRareCards[randomIndex].card_id,
                       "card_name": allUltraRareCards[randomIndex].card_name,
                       "power": allUltraRareCards[randomIndex].power,
-                      "image_url": "n/a",
+                      "image_url": allCommonCards[randomIndex].image_url,
                       "rarity": allUltraRareCards[randomIndex].rarity
                   },
                   "player": {
@@ -167,7 +168,6 @@ export default function Store() {
 
           function subtractPoints(cost){
             storeUser.points -= cost;
-            console.log(storeUser.points)
             axios.put('http://localhost:8000/player/update/' + storeUser.player_id, storeUser)
           }
         
@@ -220,10 +220,16 @@ return ( storeUser ?
                     <div className="purchase-content">
                         <h2 className="popup-header">Here's What You Got!</h2>
                         <div className="new-cards-div">
-                            <div className="new-card"></div>
-                            <div className="new-card"></div>
-                            <div className="new-card"></div>
-                            <div className="new-card"></div>
+                            {
+                            fourChosenCards.length > 0 ? fourChosenCards.map(card => (
+                                <div className="new-card">
+                                    <p>{card.card_name}</p>
+                                    <p>Id: {card.card_id}</p>
+                                    <p>{card.image_url}</p>
+                                    <p>Power: {card.image_url}</p>
+                                </div> 
+                            )) : <p>Nothing yet...</p>
+                            }
                         </div>
                         <h3 className="purchase-paragraph">Nice! These cards will be added to your inventory. Head over to the deck builder to customize your deck for your next game.</h3>
                     </div>

@@ -117,12 +117,13 @@ function DeckBuilder() {
     }
 
     async function saveDeckToDatabase(ids){
+
+      console.log('Button clicked')
+
       let playerDeck;
       let user;
       let returnedCard;
 
-      
-      
       let playerUrl = ('http://localhost:8000/player/id/' + userId);
       await axios.get(playerUrl)
       .then(response => {
@@ -136,33 +137,20 @@ function DeckBuilder() {
         })
 
         for(let i = 0; i < playerDeck.length; i++){
-         // console.log(playerDeck[i])
           let cardUrl = ('http://localhost:8000/card/id/' + ids[i])
             await axios.get(cardUrl)
             .then(response => {
               returnedCard = response.data;
             })
-
-
+            
             const finalPlayerDeck = {
               rel_id : playerDeck[i].rel_id,
               player : user ,
-              card : returnedCard,
-              
+              card : returnedCard
            }
-
-
-            // finalPlayerDeck.rel_id = 
-            // finalPlayerDeck.card = ;
-            // finalPlayerDeck.player = ;
-
-            // console.log(finalPlayerDeck);
-            // console.log(playerDeck[i].rel_id)
 
             await axios.put('http://localhost:8000/deck/update/'+ playerDeck[i].rel_id  , finalPlayerDeck)
           
-        
-            
           }
       
     }
