@@ -121,11 +121,7 @@ function DeckBuilder() {
       let user;
       let returnedCard;
 
-      let finalPlayerDeck = {
-         user, 
-         "card" : null,
-         "rel_id" : 0
-      }
+      
       
       let playerUrl = ('http://localhost:8000/player/id/' + userId);
       await axios.get(playerUrl)
@@ -140,21 +136,32 @@ function DeckBuilder() {
         })
 
         for(let i = 0; i < playerDeck.length; i++){
-          console.log(playerDeck[i])
+         // console.log(playerDeck[i])
           let cardUrl = ('http://localhost:8000/card/id/' + ids[i])
             await axios.get(cardUrl)
             .then(response => {
               returnedCard = response.data;
             })
 
-            finalPlayerDeck.rel_id = playerDeck[i].rel_id;
-            finalPlayerDeck.card = returnedCard;
 
-          let deckUrl = ('http://localhost:8000/deck/update/' + playerDeck[i].rel_id, finalPlayerDeck)
-          await axios.put(deckUrl)
-          .then(response => {
-            let returnedDeck = response.data;
-          })
+            const finalPlayerDeck = {
+              rel_id : playerDeck[i].rel_id,
+              player : user ,
+              card : returnedCard,
+              
+           }
+
+
+            // finalPlayerDeck.rel_id = 
+            // finalPlayerDeck.card = ;
+            // finalPlayerDeck.player = ;
+
+            // console.log(finalPlayerDeck);
+            // console.log(playerDeck[i].rel_id)
+
+            await axios.put('http://localhost:8000/deck/update/'+ playerDeck[i].rel_id  , finalPlayerDeck)
+          
+        
             
           }
       
