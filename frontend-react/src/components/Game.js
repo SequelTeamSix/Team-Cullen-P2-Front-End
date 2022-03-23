@@ -15,6 +15,7 @@ function Game() {
     const [rulesDisplay, setRulesDisplay] = useState('none');
     const [winDisplay, setWinDisplay] = useState('none');
     const [loseDisplay, setLoseDisplay] = useState('none');
+    const [resetGame, setResetGame] = useState('false')
    
     const [fiveDisplayedCards, setFiveDisplayedCards] = useState([]);
     const [playerCardInPlay, setPlayerCardInPlay] = useState([]);
@@ -57,7 +58,7 @@ function Game() {
             }) 
         }
         
-    }, [])
+    }, [resetGame])
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -162,7 +163,6 @@ function Game() {
             axios.put('http://localhost:8000/player/update/' + userId, currentUser)
             .then(response => {
                 let updatedResponseObj = response.data;
-               
                 setCurrentUser(updatedResponseObj)
               })
             //Add Loss To Database
@@ -181,7 +181,6 @@ function Game() {
     }
 
     function removeCardFrom5(id){
-    
      let indexToRemove;
      let fiveCards = Array.from(document.getElementsByClassName('card'));
         fiveCards.map(card => {
@@ -226,12 +225,6 @@ function Game() {
             // fiveDisplayedCards[indexToRemove] = poppedCardFragment;
         })
         drawCard(indexToRemove)
-    }
-
-    function startNewGame(){
-        setWinDisplay('none')
-        setLoseDisplay('none')
-        console.log("New Game Started")
     }
       
     function openRulesPopup(){
@@ -311,9 +304,9 @@ return ( fiveDisplayedCards && currentUser ?
                             data-key={Math.random()}
                             data-id={card.card.card_id}
                             >
-                                <div className="play-card-banner">
-                                 <p className="play-card-title">{card.card.card_name}</p>
-                                </div>
+                            <div className="play-card-banner">
+                                <p className="play-card-title">{card.card.card_name}</p>
+                            </div>
                             <p className="play-card-power">{card.card.power}</p>
                             <p className="hidden-image-url">{card.card.image_url}</p>
                             </div>
@@ -333,7 +326,7 @@ return ( fiveDisplayedCards && currentUser ?
                 <div className="end-screen-overlay"></div>
                     <div className="end-screen-content">
                         <h3 className="end-screen-header">You Win!</h3>
-                        <p className="end-screen-btn" onClick={()=>startNewGame()}>Play Again With Same Deck</p>
+                        <p className="end-screen-btn" onClick={() => window.location.reload()}>Play Again With Same Deck</p>
                         <Link className="end-screen-btn" to="/home" state={{userId: userId}}>Quit</Link>
                     </div>
                 </div>
@@ -344,7 +337,7 @@ return ( fiveDisplayedCards && currentUser ?
                     <div className="end-screen-overlay"></div>
                     <div className="end-screen-content win">
                         <h3 className="end-screen-header">You Lose!</h3>
-                        <p className="end-screen-btn" onClick={()=>startNewGame()}>Play Again With Same Deck</p>
+                        <p className="end-screen-btn" onClick={() => window.location.reload()}>Play Again With Same Deck</p>
                         <Link className="end-screen-btn" to="/home" state={{userId: userId}}>Quit</Link>
                     </div>
                 </div>

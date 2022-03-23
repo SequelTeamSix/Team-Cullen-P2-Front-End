@@ -88,10 +88,9 @@ export default function Store() {
         }
 
        async function get4CommonCards(){
+        let fourBoughtCardsArray = [];
               for(let i = 0; i < 4; i++){
                 let randomIndex = Math.floor(Math.random() * allCommonCards.length);
-                setFourChosenCards(...fourChosenCards, fourChosenCards.push(allCommonCards[randomIndex]))
-                // fourChosenCards.push(allCommonCards[randomIndex]);
                 const newOwnedCard = {
                         "card": {
                             "card_id": allCommonCards[randomIndex].card_id,
@@ -109,9 +108,12 @@ export default function Store() {
                             "loses": storeUser.loses
                         }
                 }
+                fourBoughtCardsArray.push(newOwnedCard)
+
              await axios.put('http://localhost:8000/ownedcards/update', newOwnedCard)
               console.log(newOwnedCard)
           } 
+          setFourChosenCards(fourBoughtCardsArray)
         }
 
         async function get4RareCards(){
@@ -222,12 +224,13 @@ return ( storeUser ?
                         <div className="new-cards-div">
                             {
                             fourChosenCards.length > 0 ? fourChosenCards.map(card => (
-                                <div className="new-card">
-                                    <p>{card.card_name}</p>
-                                    <p>Id: {card.card_id}</p>
-                                    <p>{card.image_url}</p>
-                                    <p>Power: {card.image_url}</p>
-                                </div> 
+                            <div className="new-card" key={Math.random()} style={{backgroundImage: `url(${card.card.image_url})`}}>
+                                <div className="play-card-banner">
+                                    <p className="play-card-title">{card.card.card_name}</p>
+                                </div>
+                                <p className="play-card-power">{card.card.power}</p>
+                                <p className="hidden-image-url">{card.card.image_url}</p>
+                            </div>
                             )) : <p>Nothing yet...</p>
                             }
                         </div>
