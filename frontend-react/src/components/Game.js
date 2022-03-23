@@ -22,7 +22,7 @@ function Game() {
     const [allCardsForComputer, setAllCardsForComputer] = useState([])
     const [computerScore, setComputerScore] = useState(0);
     const [playerScore, setPlayerScore] = useState(0);
-
+    // const [randomizedDeck, setRandomizedDeck] = useState();
 
     let allPossibleCards = []
     let playersRandomizedDeck = [];
@@ -51,8 +51,7 @@ function Game() {
             allPossibleCards.push(card)
           )) 
           setAllCardsForComputer(allPossibleCards)
-        })
-
+        })  
     }, [])
 
     useEffect(() => {
@@ -62,40 +61,32 @@ function Game() {
         return () => clearTimeout(timer);
       }, []);
 
-
-      //This doesn't ensure all the user's cards will be used!
-    function randomizeDeck(cards){
-        for(let i = 0; i < cards.length; i++){
-            let randomIndex = Math.floor(Math.random() * cards.length);
-            playersRandomizedDeck.push(cards[randomIndex]);
-        }
-      }
+        function randomizeDeck(cards) {
+            playersRandomizedDeck = cards.sort(() => Math.random() - 0.5)
+            }
+      
 
       function drawCard(amount){
         for(let i = 0; i < amount; i++){
-          let newCard = playersRandomizedDeck[i];
+          let newCard = playersRandomizedDeck.pop();
           fiveCards.push(newCard)
-          playersRandomizedDeck.splice(i, 1)
         }
+        console.log(playersRandomizedDeck)
         setFiveDisplayedCards(fiveCards)
     }
 
     function playCard(e){   
-        console.log(fiveCards)
         let randomIndex = Math.floor(Math.random() * 80)
         let computerPower = allCardsForComputer[randomIndex].power;
         let playerPower = e.target.getElementsByClassName('play-card-power')[0].innerHTML;
         let characterName = e.target.getElementsByClassName('play-card-title')[0].innerHTML;
         let imageUrl = e.target.lastElementChild.innerHTML;
-       
-        console.log(e.target)
-        fiveDisplayedCards.map(card => (
-            console.log(card)
-        ));
-
+        let uniqueId = e.target.getAttribute("data-key")
+        console.log(playersRandomizedDeck)
+      
         let playerCard = (
             <Fragment>
-               <div className="card-in-play" key={Math.random()} style={{backgroundImage: `url(${imageUrl})`}}>
+               <div className="card-in-play" data-key={uniqueId} key={Math.random()} style={{backgroundImage: `url(${imageUrl})`}}>
                     <div className="play-card-banner">
                         <p className="play-card-title">{characterName}</p>
                     </div>
@@ -117,7 +108,7 @@ function Game() {
           )
         setComputerCardInPlay(computerCard)
         compareCards(computerPower, playerPower);
-        // removeCardFrom5(key)
+        // removeCardFrom5(uniqueId)
     }
 
     function compareCards(computerPower, playerPower){
@@ -164,9 +155,58 @@ function Game() {
         }
     }
 
-    function removeCardFrom5(index){
-        fiveCards.splice(index, 1)
+    function removeCardFrom5(id){
+     let indexToRemove;
+     let fiveCards = Array.from(document.getElementsByClassName('card'));
         console.log(fiveCards)
+        fiveCards.map(card => {
+            
+            let attribute = card.getAttribute('data-key');
+            console.log(attribute)
+            console.log('id: ' + id)
+            if(attribute == id){
+                let cardWeNeed;
+                let dataId = card.getAttribute('data-id')
+
+              for(let i = 0; i < allCardsForComputer.length; i++){
+                  if(allCardsForComputer[i].card_id == dataId){
+                      cardWeNeed = allCardsForComputer[i]
+                  }
+              }
+                console.log(cardWeNeed)
+
+                for(let j = 0; j < fiveDisplayedCards.length; j++){
+                    console.log(fiveDisplayedCards[j].card)
+                    if(JSON.stringify(fiveDisplayedCards[j].card) === JSON.stringify(cardWeNeed)){
+                        indexToRemove = j
+                        console.log(indexToRemove)
+                    }
+                }
+            }
+            console.log(playersRandomizedDeck)
+            let poppedCard = playersRandomizedDeck.pop()
+            console.log(poppedCard)
+
+            let poppedCardFragment = (
+                <Fragment>
+                      <div 
+                            className="card" 
+                            onClick={(e)=>playCard(e)} 
+                            key={Math.random()} 
+                            style={{backgroundImage: `url(${poppedCard.image_url})`}}
+                            data-key={Math.random()}
+                            data-id={poppedCard.card_id}
+                            >
+                                <div className="play-card-banner">
+                                 <p className="play-card-title">{poppedCard.card_name}</p>
+                                </div>
+                            <p className="play-card-power">{poppedCard.power}</p>
+                            <p className="hidden-image-url">{poppedCard.image_url}</p>
+                            </div>
+                </Fragment>
+              )
+            fiveDisplayedCards[indexToRemove] = poppedCardFragment;
+        })
 
         //Add another card from Player Deck
         // setFiveDisplayedCards(fiveCards)
@@ -249,10 +289,12 @@ return ( fiveDisplayedCards && currentUser ?
                         {fiveDisplayedCards.map(card => (
                             <div 
                             className="card" 
+                            
                             onClick={(e)=>playCard(e)} 
                             key={Math.random()} 
                             style={{backgroundImage: `url(${card.card.image_url})`}}
                             data-key={Math.random()}
+                            data-id={card.card.card_id}
                             >
                                 <div className="play-card-banner">
                                  <p className="play-card-title">{card.card.card_name}</p>

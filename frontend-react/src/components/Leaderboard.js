@@ -13,7 +13,7 @@ export default function Leaderboard(){
         getLeaderBoardData();
 
         function getLeaderBoardData(){
-            let url = 'http://localhost:8000/player/';
+            let url = 'http://localhost:8000/player/leaderboard';
             console.log(url)
             axios.get(url)
             .then(response => {

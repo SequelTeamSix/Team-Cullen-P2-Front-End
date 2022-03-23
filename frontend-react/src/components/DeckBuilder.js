@@ -7,12 +7,15 @@ import '../css/DeckBuilder.css';
 function DeckBuilder() {
     const location = useLocation();
     const { userId } = location.state;
+    const [innactiveDisplay, setInnactiveDisplay] = useState('none');
     const [currentUsersCards, setCurrentUsersCards] = useState();
     const [gameplaySlotsArray, setGameplaySlotsArray] = useState();
     const [availableSlots, setAvailableSlots] = useState(20);
-    const [nextInsertIndex, setNextInsertIndex] = useState(0)
+    const [nextInsertIndex, setNextInsertIndex] = useState(0);
+    const [deckCardIds, setDeckCardIds] = useState([]);
 
     var gameplaySlots = [];
+    var deckCardIdArray = []
 
     for(let i = 0; i < 20; i++){
         gameplaySlots.push(<div className="gameplay-card-slot" key={i}><p>Choose a Card</p></div>)
@@ -21,8 +24,6 @@ function DeckBuilder() {
     useEffect(() => {
       getUsersCards(userId);      
       setGameplaySlotsArray(gameplaySlots)
-      console.log(gameplaySlots)
-
 
       function getUsersCards(id){
         let url = 'http://localhost:8000/ownedcards/player/' + id;
@@ -36,12 +37,17 @@ function DeckBuilder() {
 
    
     function addCardToGameplayDeck(e){
+      deckCardIds.map(id => (deckCardIdArray.push(id)))
+      let id = e.target.getElementsByClassName('hidden-id')[0].innerHTML;
+      deckCardIdArray.push(id)
+      setDeckCardIds(deckCardIdArray)
       let power = e.target.getElementsByClassName('owned-card-power')[0].innerHTML;
       let name = e.target.getElementsByClassName('owned-card-title')[0].innerHTML;
-      let imageUrl = e.target.lastElementChild.innerHTML;
+      let imageUrl = e.target.getElementsByClassName('hidden-image-url')[0].innerHTML;
+      toggleInnactiveOn(id)
       let card = (
         <Fragment>
-           <div className="deck-card" onClick={() => removeCard()} key={Math.random()} style={{backgroundImage: `url(${imageUrl})`}}>
+           <div className="deck-card" onClick={() => removeCard(id)} key={Math.random()} style={{backgroundImage: `url(${imageUrl})`}}>
                 <div className="deck-card-banner">
                     <p className="deck-card-title">{name}</p>
                 </div>
@@ -51,6 +57,7 @@ function DeckBuilder() {
       )
     
     if(availableSlots > 0){
+      setInnactiveDisplay('block')
       gameplaySlotsArray[nextInsertIndex] = card;
       setNextInsertIndex(nextInsertIndex + 1)
       setAvailableSlots(availableSlots - 1)
@@ -59,17 +66,98 @@ function DeckBuilder() {
     }
     }
 
-    function removeCard(){
+    function removeCard(cardId){
+      deckCardIds.map(id => (
+        deckCardIdArray.push(id)
+      ))
+      let index = deckCardIdArray.indexOf(cardId)
+      deckCardIdArray.splice(index, 1)
+      setDeckCardIds(deckCardIdArray)
       let slot = (
         <Fragment>
           <div className="gameplay-card-slot"key={Math.random}><p>Choose a Card</p></div>
         </Fragment>
       )
       console.log('clicked')
+      toggleInnactiveOff(cardId)
       setNextInsertIndex(nextInsertIndex - 1)
       gameplaySlotsArray[nextInsertIndex] = slot;
       setAvailableSlots(availableSlots + 1)
       setNextInsertIndex(nextInsertIndex)
+    }
+
+    function toggleInnactiveOn(cardId){
+      //we need a card object
+      let matchingCard = null;
+      for(let i = 0; i<currentUsersCards.length;i++){
+        if(currentUsersCards[i].card.card_id == cardId){
+          matchingCard = currentUsersCards[i]
+        }
+      }
+      
+      let counter = 1;
+
+      for(let i = 0; i < deckCardIds.length; i++){
+        if(deckCardIds[i] == cardId){
+          counter++
+        }
+      }
+
+      if(counter == matchingCard.quantitiy){
+        let cardToTarget = document.getElementById(cardId);
+        let overlay = cardToTarget.lastElementChild;
+        overlay.style.display = 'block'
+      }
+    }
+
+    function toggleInnactiveOff(cardId){
+      let cardToTarget = document.getElementById(cardId);
+      let overlay = cardToTarget.lastElementChild;
+      overlay.style.display = 'none'
+    }
+
+    async function saveDeckToDatabase(ids){
+      let playerDeck;
+      let user;
+      let returnedCard;
+
+      let finalPlayerDeck = {
+         user, 
+         "card" : null,
+         "rel_id" : 0
+      }
+      
+      let playerUrl = ('http://localhost:8000/player/id/' + userId);
+      await axios.get(playerUrl)
+      .then(response => {
+        user = response.data;
+      })
+
+      let url = ('http://localhost:8000/deck/player/' + userId);
+        await axios.get(url)
+        .then(response => {
+          playerDeck = response.data;
+        })
+
+        for(let i = 0; i < playerDeck.length; i++){
+          console.log(playerDeck[i])
+          let cardUrl = ('http://localhost:8000/card/id/' + ids[i])
+            await axios.get(cardUrl)
+            .then(response => {
+              returnedCard = response.data;
+            })
+
+            finalPlayerDeck.rel_id = playerDeck[i].rel_id;
+            finalPlayerDeck.card = returnedCard;
+
+          let deckUrl = ('http://localhost:8000/deck/update/' + playerDeck[i].rel_id, finalPlayerDeck)
+          await axios.put(deckUrl)
+          .then(response => {
+            let returnedDeck = response.data;
+          })
+            
+          }
+      
     }
 
     return ( currentUsersCards ? 
@@ -93,19 +181,20 @@ function DeckBuilder() {
                <div className="all-cards">
                     {
                       currentUsersCards.map(card => (
-                        <div className="owned-card-slot" key={Math.random()} style={{backgroundImage: `url(${card.card.image_url})`}} onClick={(e)=> addCardToGameplayDeck(e)}>
+                         <div className="owned-card-slot" id={card.card.card_id} key={card.card.card_id} style={{backgroundImage: `url(${card.card.image_url})`}} onClick={(e)=> addCardToGameplayDeck(e)}>
                             <div className="owned-card-banner">
                               <p className="owned-card-title">{card.card.card_name}</p>
                             </div>
                             <p className="owned-card-power">{card.card.power}</p>
                             <p className="hidden-image-url">{card.card.image_url}</p>
+                            <p className="hidden-id">{card.card.card_id}</p>
+                            <div className="innactive-overlay"></div>
                         </div>
-                        
                       ))
                     }
                </div>
                </div>
-            <button className="save-deck-btn">Save This Deck</button>
+            <button className="save-deck-btn" onClick={()=> {saveDeckToDatabase(deckCardIds)}}>Save This Deck</button>
             </div>
 
             </div>

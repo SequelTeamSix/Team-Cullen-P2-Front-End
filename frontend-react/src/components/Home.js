@@ -45,8 +45,14 @@ export default function Home() {
         }, [userId])
 
 
-        function triggerCardPreview(){
-            console.log('triggered')
+            function triggerCardPreview(){
+            currentUser.has_logged_in = "true"
+            console.log(currentUser)
+            axios.put('http://localhost:8000/player/update/' + userId, currentUser)
+            .then(response => {
+            let returnedPlayer = response.data;
+            setCurrentUser(returnedPlayer)
+            })
             setPreviewDisplay('flex')
             setGiftDisplay('none')
         }
@@ -67,6 +73,7 @@ export default function Home() {
 
 return ( currentUser && currentUsersCards ? 
     <div>
+        {console.log(currentUser)}
         <div className="main-page-bg">
         <div className="main-page-overlay"></div>
             <div className="home-container">
@@ -77,7 +84,9 @@ return ( currentUser && currentUsersCards ?
                     <p className="info current-wins">Wins: {currentUser.wins}</p>
                     <p className="info current-loses">Losses: {currentUser.loses}</p>
                     <p className="info current-cards">Cards: {currentUsersCards.length} of 80</p>
-                    {currentUser.wins === 0 && currentUser.loses === 0 ? 
+                    <p className="info current-cards">Has Logged In: {currentUser.has_logged_in}</p>
+
+                    {currentUser.has_logged_in !== 'true' ? 
                     <div className="gift-div" onClick={() => triggerCardPreview()} style={{display: giftDisplay}}>
                         <img className="gift" src={gift} alt="gift box"></img>
                     </div> : ''
