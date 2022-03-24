@@ -21,9 +21,9 @@ export default function Store() {
         getAllCardsFromDB()
  
         function getAllCardsFromDB(){
-            let commonUrl = 'http://localhost:8000/card/rarity/1';
-            let rareUrl = 'http://localhost:8000/card/rarity/2';
-            let ultraRareUrl = 'http://localhost:8000/card/rarity/3';
+            let commonUrl = 'https://teamcullenwebapp2.azurewebsites.net/card/rarity/1';
+            let rareUrl = 'https://teamcullenwebapp2.azurewebsites.net/card/rarity/2';
+            let ultraRareUrl = 'https://teamcullenwebapp2.azurewebsites.net/card/rarity/3';
 
             axios.get(commonUrl)
             .then(response => {
@@ -43,7 +43,7 @@ export default function Store() {
         }
 
         function getStoreUserDetails(id){
-            let url = 'http://localhost:8000/player/id/' + id;
+            let url = 'https://teamcullenwebapp2.azurewebsites.net/player/id/' + id;
             axios.get(url)
             .then(response => {
               let returnedUser = response.data;
@@ -109,23 +109,21 @@ export default function Store() {
                         }
                 }
                 fourBoughtCardsArray.push(newOwnedCard)
-
-             await axios.put('http://localhost:8000/ownedcards/update', newOwnedCard)
-              console.log(newOwnedCard)
+             await axios.put('https://teamcullenwebapp2.azurewebsites.net/ownedcards/update', newOwnedCard)
           } 
           setFourChosenCards(fourBoughtCardsArray)
         }
 
         async function get4RareCards(){
+            let fourBoughtCardsArray = []
             for(let i = 0; i < 4; i++){
               let randomIndex = Math.floor(Math.random() * allRareCards.length);
-              fourChosenCards.push(allRareCards[randomIndex]);
               const newOwnedCard = {
                       "card": {
                           "card_id": allRareCards[randomIndex].card_id,
                           "card_name": allRareCards[randomIndex].card_name,
                           "power": allRareCards[randomIndex].power,
-                          "image_url": allCommonCards[randomIndex].image_url,
+                          "image_url": allRareCards[randomIndex].image_url,
                           "rarity": allRareCards[randomIndex].rarity
                       },
                       "player": {
@@ -137,21 +135,22 @@ export default function Store() {
                           "loses": storeUser.loses
                       }
               }
-            await axios.put('http://localhost:8000/ownedcards/update', newOwnedCard)
-            console.log(newOwnedCard)
+            fourBoughtCardsArray.push(newOwnedCard)
+            await axios.put('https://teamcullenwebapp2.azurewebsites.net/ownedcards/update', newOwnedCard)
         } 
+        setFourChosenCards(fourBoughtCardsArray)
       }
 
      async function get4UltraRareCards(){
+         let fourBoughtCardsArray = []
         for(let i = 0; i < 4; i++){
           let randomIndex = Math.floor(Math.random() * allUltraRareCards.length);
-          fourChosenCards.push(allUltraRareCards[randomIndex]);
           const newOwnedCard = {
                   "card": {
                       "card_id": allUltraRareCards[randomIndex].card_id,
                       "card_name": allUltraRareCards[randomIndex].card_name,
                       "power": allUltraRareCards[randomIndex].power,
-                      "image_url": allCommonCards[randomIndex].image_url,
+                      "image_url": allUltraRareCards[randomIndex].image_url,
                       "rarity": allUltraRareCards[randomIndex].rarity
                   },
                   "player": {
@@ -163,18 +162,18 @@ export default function Store() {
                       "loses": storeUser.loses
                   }
           }
-       await axios.put('http://localhost:8000/ownedcards/update', newOwnedCard)
-        console.log(newOwnedCard)
+          fourBoughtCardsArray.push(newOwnedCard)
+            await axios.put('https://teamcullenwebapp2.azurewebsites.net/ownedcards/update', newOwnedCard)
     } 
+    setFourChosenCards(fourBoughtCardsArray)
+
   }
 
           function subtractPoints(cost){
             storeUser.points -= cost;
-            axios.put('http://localhost:8000/player/update/' + storeUser.player_id, storeUser)
+            axios.put('https://teamcullenwebapp2.azurewebsites.net/player/update/' + storeUser.player_id, storeUser)
           }
         
-        
-    
 
 return ( storeUser ? 
       <div className="store-bg">
@@ -225,11 +224,10 @@ return ( storeUser ?
                             {
                             fourChosenCards.length > 0 ? fourChosenCards.map(card => (
                             <div className="new-card" key={Math.random()} style={{backgroundImage: `url(${card.card.image_url})`}}>
-                                <div className="play-card-banner">
-                                    <p className="play-card-title">{card.card.card_name}</p>
+                                <div className="bought-card-banner">
+                                    <p className="bought-card-title">{card.card.card_name}</p>
                                 </div>
-                                <p className="play-card-power">{card.card.power}</p>
-                                <p className="hidden-image-url">{card.card.image_url}</p>
+                                <p className="bought-card-power">{card.card.power}</p>
                             </div>
                             )) : <p>Nothing yet...</p>
                             }
@@ -241,6 +239,9 @@ return ( storeUser ?
 
             </div>
             </div>
-            </div> : <div> Loading...</div>
+            </div> : <div className="loading-screen">
+                    <div className="loading-overlay"></div>
+                 <h1 className="loading">Loading...</h1>
+                 </div>
     )
   }

@@ -13,7 +13,7 @@ export default function Leaderboard(){
         getLeaderBoardData();
 
         function getLeaderBoardData(){
-            let url = 'http://localhost:8000/player/leaderboard';
+            let url = 'https://teamcullenwebapp2.azurewebsites.net/player/leaderboard';
             console.log(url)
             axios.get(url)
             .then(response => {
@@ -52,6 +52,8 @@ export default function Leaderboard(){
                             }
                     </ol>
             </div>
-         </div> : <div> Loading...</div>
+         </div> : 
+                 <h1 className="loading">Loading...</h1>
+               
     )
 }

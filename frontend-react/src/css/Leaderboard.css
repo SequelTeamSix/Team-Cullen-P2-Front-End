@@ -3,8 +3,8 @@
     min-height: 200px;
     background: rgb(255,255,255);
     background: linear-gradient(180deg, rgba(255,255,255,1) 2%, rgba(161,191,219,1) 100%, rgba(24,181,158,1) 100%, rgba(8,124,160,1) 100%, rgba(0,212,255,1) 100%);
-    padding: 20px;
-    padding-right: 30px;
+    padding: 3vw 1vw;
+    padding-right: 2vw;
     margin: 0 20px;
     margin-bottom: 50px;
     border-radius: 5px;
@@ -12,7 +12,7 @@
 }
 
 .leaderboard-header {
-    font-size: 28px;
+    font-size: 1.6vw;
     margin: 0px 0px 20px 0px;
     color: rgba(9, 12, 155, 1);
     text-align: center;
@@ -25,7 +25,7 @@
 }
 
 .leaderboard-headings {
-    font-size: 18px;
+    font-size: .8vw;
 }
 
 .leaderboard-li {
@@ -35,6 +35,7 @@
 .leaderboard-name {
     margin: 0;
     padding-left: 10px;
+    font-size: .8vw;
 }
 
 ol>li:nth-child(odd){
@@ -44,9 +45,4 @@ ol>li:nth-child(odd){
 .leaderboard-li-div {
     display: flex;
     justify-content: space-between;
-}
-
-.leaderboard-name {
-  
-   
 }

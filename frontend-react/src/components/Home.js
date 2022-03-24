@@ -26,7 +26,7 @@ export default function Home() {
         getUsersCards(userId)
     
         function getUserById(id){
-            let url = 'http://localhost:8000/player/id/' + id;
+            let url = 'https://teamcullenwebapp2.azurewebsites.net/player/id/' + id;
             axios.get(url)
             .then(response => {
               let returnedUser = response.data;
@@ -35,7 +35,7 @@ export default function Home() {
           }
 
         function getUsersCards(id){
-            let url = 'http://localhost:8000/ownedcards/player/' + id;
+            let url = 'https://teamcullenwebapp2.azurewebsites.net/ownedcards/player/' + id;
             axios.get(url)
             .then(response => {
             let returnedUsersCards = response.data;
@@ -48,7 +48,7 @@ export default function Home() {
             function triggerCardPreview(){
             currentUser.has_logged_in = "true"
             console.log(currentUser)
-            axios.put('http://localhost:8000/player/update/' + userId, currentUser)
+            axios.put('https://teamcullenwebapp2.azurewebsites.net/player/update/' + userId, currentUser)
             .then(response => {
             let returnedPlayer = response.data;
             setCurrentUser(returnedPlayer)
@@ -84,7 +84,6 @@ return ( currentUser && currentUsersCards ?
                     <p className="info current-wins">Wins: {currentUser.wins}</p>
                     <p className="info current-loses">Losses: {currentUser.loses}</p>
                     <p className="info current-cards">Cards: {currentUsersCards.length} of 80</p>
-                    <p className="info current-cards">Has Logged In: {currentUser.has_logged_in}</p>
 
                     {currentUser.has_logged_in !== 'true' ? 
                     <div className="gift-div" onClick={() => triggerCardPreview()} style={{display: giftDisplay}}>
@@ -132,8 +131,8 @@ return ( currentUser && currentUsersCards ?
                     choose which card to play to the center at the same time. The cards fight each other
                     and the one with the higher power value wins. The winning player will then get +1 to their score
                     and both cards are discarded (regardless of whether they won or lost). Ties reward no score
-                    to either player. Each player then draws a newcard from their deck and they keep playing. 
-                    First player to get a score of 10 wins. 
+                    to either player. Each player then draws a new card from their deck and they keep playing. 
+                    First player to get a score of 10 wins.
                         </p>
                     </div>
                 </div>
@@ -142,7 +141,10 @@ return ( currentUser && currentUsersCards ?
             
             </div>
         </div>
-    </div> : <div> Loading...</div>
+    </div> : <div className="loading-screen">
+                    <div className="loading-overlay"></div>
+                 <h1 className="loading">Loading...</h1>
+                 </div>
     )
   }
   

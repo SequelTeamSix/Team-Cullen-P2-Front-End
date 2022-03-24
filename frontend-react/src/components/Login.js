@@ -5,7 +5,7 @@ import '../css/Login.css';
 import { Link } from 'react-router-dom';
 import { render } from "react-dom";
 import { ThemeContext } from "./App";
-import stan from "../images/stan-lee.png";
+import stan from "../images/stan-lee.png";  
 
 
 
@@ -78,7 +78,7 @@ import stan from "../images/stan-lee.png";
           'loses': 0
         }
 
-        axios.post('http://localhost:8000/player/add', newUser)
+        axios.post('https://teamcullenwebapp2.azurewebsites.net/player/add', newUser)
           .then(response => {
             let newUser = response.data;
             setCurrentUserId(newUser.player_id)
@@ -89,7 +89,7 @@ import stan from "../images/stan-lee.png";
       }
 
       function getAllUsers(){
-        axios.get('http://localhost:8000/player')
+        axios.get('https://teamcullenwebapp2.azurewebsites.net/player')
         .then(response => {
           let returnedUsers = response.data;
           setAllUsers(returnedUsers);

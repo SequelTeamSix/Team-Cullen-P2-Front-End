@@ -13,6 +13,7 @@ function DeckBuilder() {
     const [availableSlots, setAvailableSlots] = useState(20);
     const [nextInsertIndex, setNextInsertIndex] = useState(0);
     const [deckCardIds, setDeckCardIds] = useState([]);
+    const [saveButtonText, setSaveButtonText] = useState('Save This Deck')
 
     var gameplaySlots = [];
     var deckCardIdArray = []
@@ -26,7 +27,7 @@ function DeckBuilder() {
       setGameplaySlotsArray(gameplaySlots)
 
       function getUsersCards(id){
-        let url = 'http://localhost:8000/ownedcards/player/' + id;
+        let url = 'https://teamcullenwebapp2.azurewebsites.net/ownedcards/player/' + id;
         axios.get(url)
         .then(response => {
           let returnedUsersCards = response.data;
@@ -118,38 +119,38 @@ function DeckBuilder() {
 
     async function saveDeckToDatabase(ids){
 
-      console.log('Button clicked')
+      setSaveButtonText('Deck Saved!')
 
       let playerDeck;
       let user;
       let returnedCard;
 
-      let playerUrl = ('http://localhost:8000/player/id/' + userId);
+      let playerUrl = ('https://teamcullenwebapp2.azurewebsites.net/player/id/' + userId);
       await axios.get(playerUrl)
       .then(response => {
         user = response.data;
       })
 
-      let url = ('http://localhost:8000/deck/player/' + userId);
+      let url = ('https://teamcullenwebapp2.azurewebsites.net/deck/player/' + userId);
         await axios.get(url)
         .then(response => {
           playerDeck = response.data;
         })
 
         for(let i = 0; i < playerDeck.length; i++){
-          let cardUrl = ('http://localhost:8000/card/id/' + ids[i])
+          let cardUrl = ('https://teamcullenwebapp2.azurewebsites.net/card/id/' + ids[i])
             await axios.get(cardUrl)
             .then(response => {
               returnedCard = response.data;
             })
-            
+
             const finalPlayerDeck = {
               rel_id : playerDeck[i].rel_id,
               player : user ,
               card : returnedCard
            }
 
-            await axios.put('http://localhost:8000/deck/update/'+ playerDeck[i].rel_id  , finalPlayerDeck)
+            await axios.put('https://teamcullenwebapp2.azurewebsites.net/deck/update/'+ playerDeck[i].rel_id  , finalPlayerDeck)
           
           }
       
@@ -163,6 +164,7 @@ function DeckBuilder() {
         <div className="builder-container">
             <Link className="home-link" to="/home" state={{userId: userId}}>Back To Home</Link>
             <h1 className="builder-title">Deck Builder</h1>
+        <div className="flex-container">
             <div className="gameplay-build">
                <h2 className="deck-title">Gameplay Deck</h2>
                <p className="deck-description">These are the cards that you will take with you into your next game. Click on one to move it back to your inventory deck.</p>
@@ -189,12 +191,16 @@ function DeckBuilder() {
                     }
                </div>
                </div>
-            <button className="save-deck-btn" onClick={()=> {saveDeckToDatabase(deckCardIds)}}>Save This Deck</button>
             </div>
+            <button className="save-deck-btn" onClick={()=> {saveDeckToDatabase(deckCardIds)}}>{saveButtonText}</button>
 
             </div>
+            </div>
         </div>
-        </div> : <div> Loading...</div>
+        </div> : <div className="loading-screen">
+                    <div className="loading-overlay"></div>
+                 <h1 className="loading">Loading...</h1>
+                 </div>
     );
   }
   

@@ -46,10 +46,12 @@ body {
 
 .current-user-name {
    color: rgba(61, 82, 213, 1);
+
 }
 
 .info {
     margin-bottom: 5px;
+    font-size: 1vw;
 }
 
 .gift-div {
@@ -74,7 +76,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    max-width: 1200px;
+    max-width: 1500px;
     margin: 0 auto;
     padding: 20px;
 }
@@ -93,14 +95,13 @@ body {
 
 .menu-link {
     text-align: center;
-    margin-top: 0;
+    margin: 1vw 0;
     font-size: 24px;
     color: white;
     background-color: rgba(186, 18, 0, .77);
     text-decoration: none;
     padding: 15px;
     border-radius: 5px;
-    margin-bottom: 20px;
     min-width: 250px;
     outline: 0;
     border: none;
@@ -132,7 +133,8 @@ body {
 .rules-inner-div{
     padding: 50px;
     margin: 0 auto;
-    height: 80%;
+    min-height: 50%;
+    height: auto;
     width: 50%;
     background: rgb(90,143,191);
     background: linear-gradient(360deg, rgba(90,143,191,1) 2%, rgba(161,191,219,1) 100%, rgba(24,181,158,1) 100%, rgba(8,124,160,1) 100%, rgba(0,212,255,1) 100%);
@@ -153,6 +155,7 @@ body {
 .rules-paragraph {
     text-align: left;
     color: white;
+    font-size: 1.5vw;
 }
 
 .close-btn {
@@ -257,7 +260,7 @@ body {
     font-size: 2vw;
     height: 50px;
     width: 50px;
-    padding: 5px;
+    padding: .4vw;
     border-radius: 50%;
     display: flex;
     justify-content: center;

@@ -20,7 +20,7 @@ function App() {
  }, [])
 
    function getAllUsers(){
-     axios.get('http://localhost:8000/player')
+     axios.get('https://teamcullenwebapp2.azurewebsites.net/player')
      .then(response => {
        let returnedUsers = response.data;
        setAllUsers(returnedUsers);

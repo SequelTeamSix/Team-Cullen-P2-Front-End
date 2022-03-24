@@ -4,6 +4,8 @@ import { Link, useLocation } from 'react-router-dom';
 import '../css/Game.css';
 import axios from 'axios';
 import _ from 'lodash';
+import pow from "../images/pow.png";
+
 
 
 function Game() {
@@ -33,21 +35,21 @@ function Game() {
         fetchData()
 
         async function fetchData(){
-            let currentUserUrl = 'http://localhost:8000/player/id/' + userId;
+            let currentUserUrl = 'https://teamcullenwebapp2.azurewebsites.net/player/id/' + userId;
             await axios.get(currentUserUrl)
             .then(response => { 
               let userObj = response.data;
               setCurrentUser(userObj)
             })
     
-            let playerDeckUrl = 'http://localhost:8000/deck/player/' + userId;
+            let playerDeckUrl = 'https://teamcullenwebapp2.azurewebsites.net/deck/player/' + userId;
             await axios.get(playerDeckUrl)
             .then(response => { 
               let playerDeck = response.data;
               randomizeDeck(playerDeck)
             })
     
-            let computerDeckUrl = 'http://localhost:8000/card';
+            let computerDeckUrl = 'https://teamcullenwebapp2.azurewebsites.net/card';
             await axios.get(computerDeckUrl)
             .then(response => { 
               let allCards = response.data;
@@ -138,6 +140,7 @@ function Game() {
     }
 
     function compareCards(computerPower, playerPower){
+        
         if(computerPower > playerPower){
             document.getElementById('computer-card-in-play').classList.add('winning-card');
             setComputerScore(computerScore + 1)
@@ -145,11 +148,12 @@ function Game() {
             document.getElementById('player-card-in-play').classList.add('winning-card')
             setPlayerScore(playerScore + 1)
         } else {
-            //They're equal, power tie animation?
+            document.getElementById('tie').classList.add('tie-animation')
         }
         setTimeout(function(){
             document.getElementById('computer-card-in-play').classList.remove('winning-card')
             document.getElementById('player-card-in-play').classList.remove('winning-card')
+            document.getElementById('tie').classList.remove('tie-animation')
         }, 1000);
         checkForWin()
     }
@@ -160,7 +164,7 @@ function Game() {
             setWinDisplay('flex')
             currentUser.wins += 1;
             currentUser.points += 15;
-            axios.put('http://localhost:8000/player/update/' + userId, currentUser)
+            axios.put('https://teamcullenwebapp2.azurewebsites.net/player/update/' + userId, currentUser)
             .then(response => {
                 let updatedResponseObj = response.data;
                 setCurrentUser(updatedResponseObj)
@@ -170,7 +174,7 @@ function Game() {
             setLoseDisplay('flex')
              currentUser.loses += 1;
              currentUser.points += 5;
-             axios.put('http://localhost:8000/player/update/' + userId, currentUser)
+             axios.put('https://teamcullenwebapp2.azurewebsites.net/player/update/' + userId, currentUser)
              .then(response => {
                let updatedResponseObj = response.data;
                setCurrentUser(updatedResponseObj)
@@ -190,11 +194,9 @@ function Game() {
                 let cardWeNeed;
                 let dataId = card.getAttribute('data-id')
                 
-
               for(let i = 0; i < allCardsForComputer.length; i++){
                   if(allCardsForComputer[i].card_id == dataId){
                       cardWeNeed = allCardsForComputer[i]
-                      
                   }
               }
                 for(let j = 0; j < fiveDisplayedCards.length; j++){
@@ -241,22 +243,26 @@ return ( fiveDisplayedCards && currentUser ?
               <div className="main-overlay"></div>
             <div className="toggle-container">
                 <div className="rules-toggle" onClick={openRulesPopup}>
-                    <p>Rules</p>
+                    <img className="pow" alt="comic pow" src={pow}></img>
+                    <p class="pow-text">Rules</p>
                 </div>
-                <Link className="quit-btn" to="/home" state={{userId: userId}}>Quit</Link>
+                <div className="quit">
+                    <img className="pow" alt="comic pow" src={pow}></img>
+                    <Link className="quit-btn" to="/home" state={{userId: userId}}>Quit</Link>
+                </div>
             </div>
 
             {/* Rules Popup */}
             <div className="rules-outer-div" style={{display: rulesDisplay}}>
-                <div className="rules-inner-div">
+                <div className="game-rules-inner-div">
                     <span className="close-btn" onClick={closeRulesPopup}>X</span>
                     <h2 className="rules-header">Rules</h2>
-                    <p className="rules-paragraph">
+                    <p className="game-rules-paragraph">
                     Each player draws 5 cards at the start of the game. Each turn, both players
                     choose which card to play to the center at the same time. The cards fight each other
                     and the one with the higher power value wins. The winning player will then get +1 to their score
                     and both cards are discarded (regardless of whether they won or lost). Ties reward no score
-                    to either player. Each player then draws a newcard from their deck and they keep playing. 
+                    to either player. Each player then draws a new card from their deck and they keep playing. 
                     First player to get a score of 10 wins. 
                     </p>
                 </div>
@@ -287,10 +293,15 @@ return ( fiveDisplayedCards && currentUser ?
                     <div id="player-card-in-play" className="player-card-in-play">
                         {playerCardInPlay}
                     </div>
-                    <div className="scoring-container">
-                        <p className="computer-score">Computer: {computerScore}</p>
-                        <p className="player-score">Player: {playerScore}</p>
-                    </div>
+                        <div className="computer-score-container">
+                            <p className="computer-score">Computer:</p>
+                            <p className="computer-score number">{computerScore}</p>
+                        </div>
+                        <div className="player-score-container">
+                            <p className="player-score">Player:</p>
+                            <p className="player-score number">{playerScore}</p>
+                        </div>
+                        <h2 id="tie">Tie!</h2>
                 </div>
 
                 <div className="player-field">
@@ -326,6 +337,7 @@ return ( fiveDisplayedCards && currentUser ?
                 <div className="end-screen-overlay"></div>
                     <div className="end-screen-content">
                         <h3 className="end-screen-header">You Win!</h3>
+                        <p className="end-game-paragraph">You've earned 15 points! Head over to the store to redeem them for new cards.</p>
                         <p className="end-screen-btn" onClick={() => window.location.reload()}>Play Again With Same Deck</p>
                         <Link className="end-screen-btn" to="/home" state={{userId: userId}}>Quit</Link>
                     </div>
@@ -337,6 +349,7 @@ return ( fiveDisplayedCards && currentUser ?
                     <div className="end-screen-overlay"></div>
                     <div className="end-screen-content win">
                         <h3 className="end-screen-header">You Lose!</h3>
+                        <p className="end-game-paragraph">Nice try! Here's 5 points to save up and get new heroes.</p>
                         <p className="end-screen-btn" onClick={() => window.location.reload()}>Play Again With Same Deck</p>
                         <Link className="end-screen-btn" to="/home" state={{userId: userId}}>Quit</Link>
                     </div>
@@ -344,7 +357,10 @@ return ( fiveDisplayedCards && currentUser ?
             </div>
 
           </div>
-    </div> : <div> Loading...</div>
+    </div> : <div className="loading-screen">
+                    <div className="loading-overlay"></div>
+                 <h1 className="loading">Loading...</h1>
+                 </div>
 )}
   
   export default Game;

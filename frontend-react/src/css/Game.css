@@ -46,11 +46,7 @@ p {
 }
 
 .rules-toggle,
-.quit-btn {
-    background-color: white;
-    height: 50px;
-    width: 50px;
-    border-radius: 50%;
+.quit {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -60,11 +56,46 @@ p {
     padding: 10px;
     cursor: pointer;
     transition: .5s ease;
+    position: relative;
 }
 
-.rules-toggle:hover,
-.quit-btn:hover {
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+.pow {
+    width: 8vw;
+    transition: .2s ease;
+}
+
+.pow:hover {
+    transform: rotate(20deg)
+}
+
+.pow-text,
+.quit-btn {
+    position: absolute;
+    margin-top: 10px;
+    font-size: 1vw;
+    text-decoration: none;
+    color: black;
+}
+
+
+.game-rules-paragraph {
+    font-size: 1.5vw;
+}
+
+.game-rules-inner-div {
+    color: white;
+    padding: 50px;
+    margin: 0 auto;
+    height: auto;
+    min-height: 50%;
+    width: 50%;
+    background: rgb(90,143,191);
+    background: linear-gradient(360deg, rgba(90,143,191,1) 2%, rgba(161,191,219,1) 100%, rgba(24,181,158,1) 100%, rgba(8,124,160,1) 100%, rgba(0,212,255,1) 100%);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 5px;
 }
 
 .game-container {
@@ -195,12 +226,61 @@ p {
     position: relative;
 }
 
-.scoring-container {
+#tie {
+    opacity: 0%;
     color: white;
-    font-size: 24px;;
+    font-family: 'Bangers', cursive;
+    letter-spacing: 5;
+    font-size: 70px;
     position: absolute;
-    right: -60%;
+    top: 30%;
+    left: 40%;
+    transform: translate(-50%, 0);
+    transition: .2s ease;
+} 
+
+.tie-animation {
+    animation: tie 1s;
+}
+
+@keyframes tie {
+    from {opacity: 0; transform: scale(1) rotate(0deg);}
+    to {opacity: 100; transform: scale(2) rotate(2deg);}
+}
+
+.computer-score,
+.player-score {
+    color: white;
+    font-size: 1.8vw;
+    font-family: 'Bangers', cursive;
+}
+
+.computer-score-container {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    top:40%;
+    left: -50%;
+}
+
+.player-score-container {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     top: 40%;
+    right: -50%;
+}
+
+.computer-score.number {
+    margin: 0 auto;
+}
+
+.player-score {
+    
 }
 
 .computer-card-in-play {
@@ -221,7 +301,7 @@ p {
     margin-left: 15px;
 }
 
-.rules-outer-div,
+
 .end-game-outer-div {
     height: 100vh;
     width: 100vw;
@@ -236,12 +316,18 @@ p {
     z-index: 10;
 }
 
-.rules-inner-div,
+.end-game-paragraph {
+    color: white;
+    font-size: 1.8vw;
+    text-align: center;
+    margin-bottom: 50px;
+}
+
 .lose-game-inner-div,
 .win-game-inner-div {
     margin: 50px auto;
     height: 80%;
-    width: 40%;
+    width: 50%;
     background-color: white;
     position: relative;
     display: flex;
@@ -288,6 +374,7 @@ p {
     align-items: center;
     justify-content: center;
     z-index: 5;
+    padding: 20px;
 }
 
 .end-screen-btn {
@@ -327,7 +414,7 @@ p {
 .play-card-title {
     color: white;
     font-family: 'Bangers', cursive;
-    font-size: 1.3vw;
+    font-size: 1vw;
     letter-spacing: 1px;
 }
 
