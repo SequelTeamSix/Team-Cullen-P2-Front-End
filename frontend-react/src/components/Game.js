@@ -92,13 +92,34 @@ function Game() {
 
         function drawCard(indexToReplace){
                 let deckArray = randomizedDeck;
-                console.log(deckArray)
-                let fiveCards = fiveDisplayedCards;
-                fiveCards[indexToReplace] = deckArray[deckArray.length - 1]
-                console.log(deckArray[deckArray.length - 1])
-                deckArray.splice(deckArray.length - 1, 1);
-                setRandomizedDeck(deckArray)
-                setFiveDisplayedCards(fiveCards)
+                if(deckArray.length > 0){
+                    console.log(deckArray)
+                    let fiveCards = fiveDisplayedCards;
+                    fiveCards[indexToReplace] = deckArray[deckArray.length - 1]
+                    console.log(deckArray[deckArray.length - 1])
+                    deckArray.splice(deckArray.length - 1, 1);
+                    setRandomizedDeck(deckArray)
+                    setFiveDisplayedCards(fiveCards)
+                }
+                else if(playerScore > computerScore) {
+                    setWinDisplay('flex')
+                    currentUser.wins += 1;
+                    currentUser.points += 15;
+                    axios.put('https://teamcullenwebapp2.azurewebsites.net/player/update/' + userId, currentUser)
+                    .then(response => {
+                        let updatedResponseObj = response.data;
+                        setCurrentUser(updatedResponseObj)
+                      })
+                } else {
+                    setLoseDisplay('flex')
+                    currentUser.loses += 1;
+                    currentUser.points += 5;
+                    axios.put('https://teamcullenwebapp2.azurewebsites.net/player/update/' + userId, currentUser)
+                    .then(response => {
+                      let updatedResponseObj = response.data;
+                      setCurrentUser(updatedResponseObj)
+                    })
+                }
     }
 
     function playCard(e){   
