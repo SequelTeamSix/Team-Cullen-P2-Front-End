@@ -2,6 +2,22 @@
 
 <p>A full-stack application leveraging a backend built with Spring framework hosted on Azure and incorporating a CI/CD pipeline, and a frontend built with React that allows users to play an online card game in which users may purchase virtual cards and duel them against a computer player.</p>
 
+<h2>Technologies Used</h2>
+<ol>
+  <li>Java</li>  
+  <li>JavaScript</li>  
+  <li>React</li>  
+  <li>Azure</li>  
+  <li>Spring Framework</li>  
+  <li>Azure SQL Database</li>  
+  <li>REST</li>  
+  <li>Maven</li>  
+  <li>NodeJS</li>  
+  <li>JUnit</li>  
+ </ol>
+ 
+ 
+<h2>Features and Workflow</h2>
 <ul>
 <li>Defined application structure, classes, methods and services with Java code in the IntelliJ IDE.</li>
 <li>Implemented a database of tables with appropriate fields and columns using SQL queries and the DBeaver tool.</li> 
