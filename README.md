@@ -17,7 +17,7 @@
  </ol>
  
  
-<h2>Features and Workflow</h2>
+<h2>Workflow</h2>
 <ul>
 <li>Defined application structure, classes, methods and services with Java code in the IntelliJ IDE.</li>
 <li>Implemented a database of tables with appropriate fields and columns using SQL queries and the DBeaver tool.</li> 
@@ -30,7 +30,41 @@
 <li>Constructed an Azure Virtual Machine to host a contained server of the project.</li>
 </ul>
 
+<h2>Features</h2>
+<ul>
+  <li>User can create a new account or sign in to an existing one.</li>
+  <li>The user can view the leaderboard on the homepage and see their current ranking among other players.</li>
+  <li>A new game can be played using the starting deck of 20 random cards.</li>
+  <li>Within the store page, the user can use the points they earn in gameplay to purchase new card packs.</li>
+  <li>The deck builder page allows the user to view all of their currently owned cards and build a unique deck for gameplay.</li>
+</ul>
+  
+<h2>To-do List</h2>
+<ul>
+  <li>Multiplayer mode where you can verse your friends.</li>
+  <li>A place to view all of the cards you could potentially own to get the player excited about collecting them all.</li>
+  <li>Add even more card and character options for gameplay.</li>
+  <li>A place to view all of the cards you could potenitally own to get the player excited about collecting them all.</li>
+  <li>Additional powers and abilities for each card to make gameplay more competitive.</li>
+</ul>
+  
+
 <h2>Get Started</h2>
 <p>- To use this application, clone the repository to your local machine.</p>
 <p>- Open the project in the IDE of your choosing.</p>
 <p>- Naviagate to the "frontend-react" folder and run the "npm start" command to open the React application in your localhost.</p>
+  
+<h2>Usage</h2>
+<p>Create an account and enjoy the game and collecting cards!</p>
+  
+<h2>Contributors</h2>
+<ul>
+  <li>Cullen Kuch</li>
+  <li>Dylan Wilson</li>
+  <li>Gideon Johnson</li>
+  <li>Mika Nelson</li>
+</ul>
+  
+<h2>License</h2>
+<p>No license required to use this application. View the backend repository here: https://github.com/SequelTeamSix/Team-Cullen-P2-Back-End</p>
+ 
